@@ -11,7 +11,8 @@
                             (hoverEnter ||
                                 route.path === '/favorite' ||
                                 route.path === '/letter' ||
-                                route.path === '/user') &&
+                                route.path === '/user' ||
+                                route.path === '/login') &&
                             !toolbar.enter,
                     },
                 ]" class="toolbar-content myBetween">
@@ -25,31 +26,31 @@
                 <!-- 手机导航按钮 -->
                 <div v-if="common.mobile() || mobile" class="toolbar-mobile-menu"
                     @click="toolbarDrawer = !toolbarDrawer" :class="{ enter: toolbar.enter }">
-                    <i class="el-icon-s-operation"></i>
+                    <el-icon><Operation /></el-icon>
                 </div>
 
                 <!-- 导航列表 -->
                 <div v-else>
                     <ul class="scroll-menu">
                         <li @click="router.push({ path: '/' })">
-                            <div class="my-menu">🏡 <span>首页</span></div>
+                            <div class="my-menu"><span>🏡 首页</span></div>
                         </li>
 
                         <li @click="gotoContent()">
-                            <div class="my-menu">🌏 <span>内容</span></div>
+                            <div class="my-menu"><span>🌏 内容</span></div>
                         </li>
 
                         <!-- 家 -->
                         <li @click="router.push({ path: '/love' })">
-                            <div class="my-menu">❤️‍🔥 <span>家</span></div>
+                            <div class="my-menu"><span>❤️‍🔥 家</span></div>
                         </li>
 
-                        <el-dropdown :hide-timeout="500" placement="bottom">
+                        <el-dropdown :hide-timeout="50" ref="dropdown" placement="bottom">
                             <li>
-                                <div class="my-menu">📒 <span>记录</span></div>
+                                <div class="my-menu"><span>📒 记录</span></div>
                             </li>
-                            <template v-slot:dropdown>
-                                <el-dropdown-menu class="el-dropdown-menu" style="width: 180px">
+                            <template #dropdown>
+                                <el-dropdown-menu class="el-dropdown-menu" style="width: 160px">
                                     <!--  class="dropdown-menu-item" -->
                                     <el-dropdown-item v-for="(sort, index) in sortInfo" :key="index" class="myCenter">
                                         <div @click="
@@ -99,20 +100,22 @@
                         <li>
                             <template v-if="common.isEmpty(store.state.currentUser)">
                                 <div class="header-avatar-wrap">
-                                    <div class="default-login" @click="router.push({ path: '/user' })">
+                                    <div class="default-login" @click="router.push({ path: '/login' })">
                                         登陆
                                     </div>
                                 </div>
                             </template>
                             <template v-if="!common.isEmpty(store.state.currentUser)">
-                                <el-dropdown placement="bottom">
-                                    <el-avatar class="user-avatar" :size="36" style="margin-top: 12px"
+                                <el-dropdown placement="bottom-end" :hide-timeout="50">
+                                    <div class="myCenter" style="width: 40px;height: 40px;">
+                                        <el-avatar class="user-avatar" :size="36" style="margin-top: 12px"
                                         :src="store.state.currentUser.avatar">
                                     </el-avatar>
+                                    </div>
 
                                     <template v-slot:dropdown>
                                         <el-dropdown-menu style="width: 150px; font-size: 14px">
-                                            <el-dropdown-item @click="router.push({ path: '/user' })"
+                                            <el-dropdown-item  @click="router.push({ path: '/user' })"
                                                 v-if="!common.isEmpty(store.state.currentUser)" class="myCenter"
                                                 style="width: 130px; margin-left: 10px">
                                                 <div class="dropdown-menu-item">
@@ -156,7 +159,8 @@
             </div>
 
             <div style="margin-bottom: 6px; cursor: pointer" v-if="showElement" @click="gotoContent()">
-                <el-tooltip placement="left" effect="light"  :teleported="false" :show-arrow="false"  popper-class="my-tooltip">
+                <el-tooltip placement="left" effect="light" :teleported="false" :show-arrow="false"
+                    popper-class="my-tooltip">
                     <template v-slot:content>
                         <div>返回主页</div>
                     </template>
@@ -173,7 +177,7 @@
                 <div class="my-setting">
                     <div>
                         <!-- 太阳按钮 -->
-                        <i v-if="isDark" class="el-icon-sunny iconRotate" @click="changeColor()"></i>
+                        <el-icon v-if="isDark" class="iconRotate" @click="changeColor()"><Sunny /></el-icon>
                         <!-- 月亮按钮 -->
                         <i v-else class="fa fa-moon-o" aria-hidden="true" @click="changeColor()"></i>
                     </div>
@@ -185,7 +189,8 @@
         </div>
 
         <!-- 点击动画 -->
-        <canvas v-if="mouseAnimation" id="mousedown" style="position: fixed;left: 0;top: 0;pointer-events: none;z-index: 1000;">
+        <canvas v-if="mouseAnimation" id="mousedown"
+            style="position: fixed;left: 0;top: 0;pointer-events: none;z-index: 1000;">
         </canvas>
 
         <!-- 图片预览 -->
@@ -195,7 +200,7 @@
             </div>
         </div>
 
-        <el-drawer v-model:visible="toolbarDrawer" :show-close="false" size="65%" custom-class="toolbarDrawer"
+        <el-drawer v-model="toolbarDrawer" :show-close="false" size="65%" class="toolbarDrawer"
             title="欢迎光临" direction="ltr">
             <div>
                 <ul class="small-menu">
@@ -216,7 +221,7 @@
                         <div style="display: flex" @click="hideOrShow()">
                             <div>📒 记录</div>
                             <div style="margin-left: 60px">
-                                <i class="el-icon-arrow-down"></i>
+                                <el-icon><ArrowDown /></el-icon>
                             </div>
                         </div>
                         <div class="my-animation-hideToShow" v-show="sortMenu">
@@ -259,7 +264,7 @@
                     </li>
 
                     <template v-if="common.isEmpty(store.state.currentUser)">
-                        <li @click="smallMenu({ path: '/user' })">
+                        <li @click="smallMenu({ path: '/login' })">
                             <div>
                                 <i class="fa fa-sign-in" aria-hidden="true"></i>
                                 <span>&nbsp;登录</span>
@@ -287,11 +292,12 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, reactive, watch, inject, toRefs } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, reactive, watch, inject, toRefs, ref } from "vue";
 import mousedown from "../utils/mousedown";
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import {Operation,ArrowDown,Sunny} from '@element-plus/icons-vue'
 
 // hooks
 const common = inject("$common");
@@ -313,6 +319,8 @@ const data = reactive({
     showElement: false,
     sortMenu: false
 });
+
+const dropdown = ref(null)
 
 onMounted(() => {
     if (data.mouseAnimation) {
@@ -350,6 +358,8 @@ onMounted(() => {
         let docWidth = document.body.clientWidth;
         data.mobile = docWidth < 900;
     });
+    console.log($('[data-popper-placement="bottom"]'))
+
 });
 
 onUnmounted(() => {
@@ -411,23 +421,6 @@ const goIm = () => {
     }
 };
 
-const verifyToken = () => {
-    let userToken = common.encrypt(localStorage.getItem("userToken"));
-    // 跳转之前判断用户token是否正常，是否过期
-    http.get(constant.baseURL + "/user/verifyToken", { token: userToken }, false, false)
-        .then((res) => {
-            return res.data;
-        })
-        .catch((error) => {
-            ElMessage({
-                message: error.message,
-                type: "error",
-            });
-            store.commit("loadCurrentUser", {});
-            localStorage.removeItem("userToken");
-            smallMenu({ path: '/user' });
-        });
-};
 
 const goAdmin = () => {
     window.open(constant.webURL + "/admin");
@@ -593,6 +586,13 @@ const changeMouseAnimation = () => {
 const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer, mobile, showElement, sortMenu } = toRefs(data)
 </script>
 
+<style>
+.custom-popper {
+    background-color: hsla(0, 0%, 100%, 0.3137254901960784) !important;
+    border: none;
+}
+</style>
+
 <style scoped>
 .toolbar-content {
     width: 100%;
@@ -704,70 +704,6 @@ const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer
     text-align: center;
     line-height: 40px;
     color: var(--white);
-}
-
-.el-dropdown {
-    font-size: unset;
-    color: unset;
-}
-
-.el-popper[x-placement^='bottom'] {
-    margin-top: -8px;
-}
-
-.el-dropdown-menu__item {
-    font-size: unset;
-}
-
-.el-dropdown-menu__item:hover {
-    background-color: var(--white);
-    color: var(--themeBackground);
-}
-
-.el-dropdown-menu {
-    background-color: hsla(0, 0%, 100%, 0.3137254901960784);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    border-radius: 8px;
-    border: unset;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.dropdown-menu-item {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 200px;
-    color: rgba(0, 0, 0, 0.5647058823529412);
-    font-weight: 700;
-    padding: 2px 8px;
-    text-align: center;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12549019607843137);
-    border-radius: 8px;
-    margin: 5px 0;
-    background-color: hsla(0, 0%, 100%, 0.3764705882352941);
-    transition: background-color 0.3s;
-}
-
-.dropdown-menu-item:hover {
-    background-color: hsla(198, 64%, 62%, 0.565);
-}
-
-.el-dropdown-menu__item {
-    padding: 0 10px;
-}
-
-.el-dropdown-menu__item:hover {
-    background-color: unset;
-    color: unset;
-}
-
-.el-popper .popper__arrow,
-.el-popper .popper__arrow:after {
-    border-bottom-color: hsla(0, 4%, 89%, 0.349);
 }
 
 #toc-button,

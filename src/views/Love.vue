@@ -216,7 +216,7 @@
                                         <div>
                                             <div class="form-title">背景封面</div>
                                             <div style="display: flex">
-                                                <el-input maxlength="120" v-model:value="userLove.bgCover"></el-input>
+                                                <el-input maxlength="120" v-model="userLove.bgCover"></el-input>
                                                 <div style="margin: 3px 0 0 10px">
                                                     <proButton :info="'上传背景'" @click="openPicture('bgCover')"
                                                         :before="constant.before_color_1"
@@ -228,7 +228,7 @@
                                         <div>
                                             <div class="form-title">男生头像</div>
                                             <div style="display: flex">
-                                                <el-input maxlength="120" v-model:value="userLove.manCover"></el-input>
+                                                <el-input maxlength="120" v-model="userLove.manCover"></el-input>
                                                 <div style="margin: 3px 0 0 10px">
                                                     <proButton :info="'上传头像'" @click="openPicture('manCover')"
                                                         :before="constant.before_color_1"
@@ -241,7 +241,7 @@
                                             <div class="form-title">女生头像</div>
                                             <div style="display: flex">
                                                 <el-input maxlength="120"
-                                                    v-model:value="userLove.womanCover"></el-input>
+                                                    v-model="userLove.womanCover"></el-input>
                                                 <div style="margin: 3px 0 0 10px">
                                                     <proButton :info="'上传头像'" @click="openPicture('womanCover')"
                                                         :before="constant.before_color_1"
@@ -253,19 +253,19 @@
                                         <div>
                                             <div class="form-title">男生昵称</div>
                                             <div>
-                                                <el-input maxlength="10" v-model:value="userLove.manName"></el-input>
+                                                <el-input maxlength="10" v-model="userLove.manName"></el-input>
                                             </div>
                                         </div>
                                         <div>
                                             <div class="form-title">女生昵称</div>
                                             <div>
-                                                <el-input maxlength="10" v-model:value="userLove.womanName"></el-input>
+                                                <el-input maxlength="10" v-model="userLove.womanName"></el-input>
                                             </div>
                                         </div>
                                         <div>
                                             <div class="form-title">计时时间</div>
                                             <div>
-                                                <el-date-picker v-model:value="userLove.timing"
+                                                <el-date-picker v-model="userLove.timing"
                                                     value-format="yyyy-MM-dd HH:mm:ss" type="datetime" align="center"
                                                     placeholder="选择计时时间">
                                                 </el-date-picker>
@@ -275,13 +275,13 @@
                                             <div class="form-title">倒计时标题</div>
                                             <div>
                                                 <el-input maxlength="20"
-                                                    v-model:value="userLove.countdownTitle"></el-input>
+                                                    v-model="userLove.countdownTitle"></el-input>
                                             </div>
                                         </div>
                                         <div>
                                             <div class="form-title">倒计时时间</div>
                                             <div>
-                                                <el-date-picker v-model:value="userLove.countdownTime"
+                                                <el-date-picker v-model="userLove.countdownTime"
                                                     value-format="yyyy-MM-dd HH:mm:ss" type="datetime" align="center"
                                                     placeholder="选择倒计时时间">
                                                 </el-date-picker>
@@ -326,7 +326,7 @@
                 :append-to-body="true" destroy-on-close :close-on-click-modal="false" center top="25vh">
                 <div>
                     <div class="myCenter" style="padding-bottom: 20px; position: relative">
-                        <el-radio-group v-model:value="isPublic" class="radio-group-center">
+                        <el-radio-group v-model="isPublic" class="radio-group-center">
                             <el-radio-button :value="true">公开</el-radio-button>
                             <el-radio-button :value="false">私密</el-radio-button>
                         </el-radio-group>
@@ -1215,20 +1215,20 @@ const { userLove, loveDialogVisible, weiYanDialogVisible, isPublic, addPictureDi
     align-items: center;
 }
 
-.user-content>>>.el-input__inner {
+.user-content :deep(.el-input__inner) {
     border: none;
     height: 40px;
     width: 300px;
     background: var(--whiteMask);
 }
 
-.user-content>>>.el-textarea__inner {
+.user-content :deep(.el-textarea__inner) {
     border: none;
     width: 250px;
     background: var(--whiteMask);
 }
 
-.user-content>>>.el-input__count {
+.user-content :deep(.el-input__count) {
     background: var(--transparent);
     user-select: none;
 }
@@ -1314,11 +1314,11 @@ const { userLove, loveDialogVisible, weiYanDialogVisible, isPublic, addPictureDi
         font-size: 1.2rem;
     }
 
-    .user-content>>>.el-textarea__inner {
+    .user-content :deep(.el-textarea__inner) {
         width: 100%;
     }
 
-    .user-content>>>.el-input__inner {
+    .user-content :deep(.el-input__inner) {
         width: 190px;
     }
 

@@ -2,17 +2,19 @@
     <div>
         <div>
             <div class="handle-box">
-                <el-select clearable v-model:value="pagination.resourceType" placeholder="资源聚合类型"
-                    class="handle-select mrb10">
+                <span>资源聚合类型：</span>
+                <el-select clearable v-model="pagination.resourceType" popper-class="custom-popper" filterable placeholder="资源聚合类型"
+                    class="handle-select" style="margin-right: 10px">
                     <el-option v-for="(item, i) in resourceTypes" :key="i" :label="item.label" :value="item.value">
                     </el-option>
                 </el-select>
-                <el-select clearable v-model:value="pagination.status" placeholder="状态" class="handle-select mrb10">
+                <span style="margin-left: 15px">状态：</span>
+                <el-select clearable v-model="pagination.status" placeholder="状态" popper-class="custom-popper" filterable class="handle-select" style="margin-right: 10px">
                     <el-option key="1" label="启用" :value="true"></el-option>
                     <el-option key="2" label="禁用" :value="false"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
-                <el-button type="primary" @click="addResourcePathDialog = true">新增资源聚合</el-button>
+                <el-button type="primary" :icon="Search" @click="search()" style="margin-left: 15px">搜索</el-button>
+                <el-button type="success" @click="addResourcePathDialog = true">新增资源聚合</el-button>
             </div>
             <el-table :data="resourcePaths" border class="table" header-cell-class-name="table-header">
                 <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
@@ -33,7 +35,7 @@
                         <el-tag :type="scope.row.status === false ? 'danger' : 'success'" disable-transitions>
                             {{ scope.row.status === false ? '禁用' : '启用' }}
                         </el-tag>
-                        <el-switch @click="changeStatus(scope.row)" v-model:value="scope.row.status"></el-switch>
+                        <el-switch @click="changeStatus(scope.row)" v-model="scope.row.status"></el-switch>
                     </template>
                 </el-table-column>
 
@@ -41,9 +43,8 @@
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template v-slot="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-                        <el-button type="text" icon="el-icon-delete" style="color: var(--orangeRed)"
-                            @click="handleDelete(scope.row)">
+                        <el-button text :icon="EditPen" type="primary" class="btn-p5" @click="handleEdit(scope.row)">编辑</el-button>
+                        <el-button text :icon="Delete" type="warning" class="btn-p5" @click="handleDelete(scope.row)">
                             删除
                         </el-button>
                     </template>
@@ -56,7 +57,7 @@
             </div>
         </div>
 
-        <el-dialog title="图片" v-model:visible="coverDialog" width="25%" :append-to-body="true"
+        <el-dialog title="图片" v-model="coverDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <UploadPicture :isAdmin="true" :prefix="resourcePath.type + 'Cover'" @addPicture="addPicture"
@@ -64,7 +65,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="文件" v-model:visible="uploadDialog" width="25%" :append-to-body="true"
+        <el-dialog title="文件" v-model="uploadDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <UploadPicture :isAdmin="true" :prefix="resourcePath.type + 'Url'" @addPicture="addFile" :maxSize="10"
@@ -72,12 +73,12 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="资源聚合" v-model:visible="addResourcePathDialog" width="40%" :before-close="clearDialog"
+        <el-dialog title="资源聚合" v-model="addResourcePathDialog" width="40%" :before-close="clearDialog"
             :append-to-body="true" :close-on-click-modal="false" center top="25vh">
             <div>
                 <div>
                     <div class="myCenter" style="margin-bottom: 12px">
-                        <el-radio-group v-model:value="resourcePath.type">
+                        <el-radio-group v-model="resourcePath.type">
                             <el-radio-button v-for="(item, index) in resourceTypes" :key="index" :value="item.value">{{
                                 item.label }}</el-radio-button>
                         </el-radio-group>
@@ -85,25 +86,25 @@
 
                     <div>
                         <div style="margin-bottom: 5px">标题：</div>
-                        <el-input maxlength="60" v-model:value="resourcePath.title"></el-input>
+                        <el-input maxlength="60" v-model="resourcePath.title"></el-input>
                     </div>
 
                     <!-- 日后打算做下拉的 -->
                     <div>
                         <div style="margin-top: 10px; margin-bottom: 5px">分类：</div>
-                        <el-input maxlength="30" v-model:value="resourcePath.classify"></el-input>
+                        <el-input maxlength="30" v-model="resourcePath.classify"></el-input>
                     </div>
 
                     <div v-show="['favorites'].includes(resourcePath.type)">
                         <div style="margin-top: 10px; margin-bottom: 5px">简介：</div>
                         <el-input :disabled="!['favorites'].includes(resourcePath.type)" maxlength="1000"
-                            v-model:value="resourcePath.introduction"></el-input>
+                            v-model="resourcePath.introduction"></el-input>
                     </div>
 
                     <div>
                         <div style="margin-top: 10px; margin-bottom: 5px">封面：</div>
                         <div style="display: flex">
-                            <el-input v-model:value="resourcePath.cover"></el-input>
+                            <el-input v-model="resourcePath.cover"></el-input>
                             <div style="width: 66px; margin: 3.5px 0 0 10px">
                                 <ProButton :info="'上传封面'" @click="addResourcePathCover()"
                                     :before="constant.before_color_1" :after="constant.after_color_1">
@@ -116,7 +117,7 @@
                         <div style="margin-top: 10px; margin-bottom: 5px">链接：</div>
                         <div style="display: flex">
                             <el-input :disabled="!['favorites'].includes(resourcePath.type)"
-                                v-model:value="resourcePath.url"></el-input>
+                                v-model="resourcePath.url"></el-input>
                             <div style="width: 66px; margin: 3.5px 0 0 10px" v-show="!['lovePhoto', 'albums', 'favorites'].includes(
                                 resourcePath.type
                             )
@@ -133,7 +134,7 @@
                         <el-input :disabled="!['lovePhoto', 'albums', 'favorites'].includes(
                             resourcePath.type
                         )
-                            " maxlength="1000" v-model:value="resourcePath.remark" type="textarea"></el-input>
+                            " maxlength="1000" v-model="resourcePath.remark" type="textarea"></el-input>
                     </div>
                 </div>
                 <div style="display: flex; margin-top: 30px" class="myCenter">
@@ -151,6 +152,7 @@ import UploadPicture from '../../components/common/UploadPicture.vue'
 import ProButton from '../../components/common/ProButton.vue'
 import { reactive, inject, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Delete, EditPen, Search } from '@element-plus/icons-vue';
 
 // hooks
 const common = inject("$common");
@@ -403,6 +405,10 @@ const { resourceTypes, pagination, resourcePaths, coverDialog, uploadDialog, add
 <style scoped>
 .handle-box {
     margin-bottom: 20px;
+}
+
+.handle-box > span {
+    font-size: 15px;
 }
 
 .handle-select {

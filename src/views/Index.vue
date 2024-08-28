@@ -36,7 +36,9 @@
                     </div>
                     <div id="bannerWave1"></div>
                     <div id="bannerWave2"></div>
-                    <i class="el-icon-arrow-down" @click="navigation('.page-container-wrap')"></i>
+                    <el-icon @click="navigation('.page-container-wrap')" class="arrow-down">
+                        <ArrowDown />
+                    </el-icon>
                 </div>
                 <!-- 首页内容 -->
                 <div class="page-container-wrap">
@@ -48,10 +50,7 @@
                             <div class="announcement background-opacity">
                                 <i class="fa fa-volume-up" aria-hidden="true"></i>
                                 <div>
-                                    <div v-for="(notice, index) in common.pushNotification(
-                                        store.state.webInfo.notices,
-                                        true
-                                    )" :key="index">
+                                    <div v-for="(notice, index) in common.pushNotification(store.state.webInfo.notices,true)" :key="index">
                                         {{ notice }}
                                     </div>
                                 </div>
@@ -113,7 +112,7 @@
             </template>
         </Loader>
 
-        <el-dialog title="每日推荐" v-model:visible="pushDialogVisible" width="40%" :append-to-body="true"
+        <el-dialog title="每日推荐" v-model="pushDialogVisible" width="40%" :append-to-body="true"
             :close-on-click-modal="false" class="index-push" center top="25vh">
             <div style="display: flex; align-items: center; flex-direction: column">
                 <div class="push-title">
@@ -185,6 +184,7 @@ import { nextTick, onMounted, reactive, computed, inject, toRefs } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { ArrowDown } from '@element-plus/icons-vue'
 
 // hooks
 const common = inject("$common");
@@ -439,7 +439,7 @@ const { pushDialogVisible, push, loading, showAside, indexType, printerInfo, pag
     font-weight: 200;
 }
 
-.el-icon-arrow-down {
+.arrow-down {
     font-size: 40px;
     font-weight: bold;
     color: var(--white);

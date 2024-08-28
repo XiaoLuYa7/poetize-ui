@@ -14,24 +14,24 @@
             </el-tag>
             <el-form :model="webInfo" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="网站名称" prop="webName">
-                    <el-input v-model:value="webInfo.webName"></el-input>
+                    <el-input v-model="webInfo.webName"></el-input>
                 </el-form-item>
 
                 <el-form-item label="网站标题" prop="webTitle">
-                    <el-input v-model:value="webInfo.webTitle"></el-input>
+                    <el-input v-model="webInfo.webTitle"></el-input>
                 </el-form-item>
 
                 <el-form-item label="页脚" prop="footer">
-                    <el-input v-model:value="webInfo.footer"></el-input>
+                    <el-input v-model="webInfo.footer"></el-input>
                 </el-form-item>
 
                 <el-form-item label="状态" prop="status">
-                    <el-switch v-model:value="webInfo.status"></el-switch>
+                    <el-switch v-model="webInfo.status"></el-switch>
                 </el-form-item>
 
                 <el-form-item label="背景" prop="backgroundImage">
                     <div style="display: flex">
-                        <el-input v-model:value="webInfo.backgroundImage"></el-input>
+                        <el-input v-model="webInfo.backgroundImage"></el-input>
                         <el-image lazy class="table-td-thumb" style="margin-left: 10px"
                             :preview-src-list="[webInfo.backgroundImage]" :src="webInfo.backgroundImage"
                             fit="cover"></el-image>
@@ -42,16 +42,16 @@
 
                 <el-form-item label="头像" prop="avatar">
                     <div style="display: flex">
-                        <el-input v-model:value="webInfo.avatar"></el-input>
+                        <el-input v-model="webInfo.avatar"></el-input>
                         <el-image lazy class="table-td-thumb" style="margin-left: 10px"
                             :preview-src-list="[webInfo.avatar]" :src="webInfo.avatar" fit="cover"></el-image>
                     </div>
-                    <UploadPicture :isAdmin="true" :prefix="'webAvatar'" style="margin-top: 15px"
+                    <UploadPicture :isAdmin="true" :prefix="'webAvatar'" class="upload_tag" style="margin-top: 15px"
                         @addPicture="addAvatar" :maxSize="2" :maxNumber="1"></UploadPicture>
                 </el-form-item>
             </el-form>
             <div class="myCenter" style="margin-bottom: 22px">
-                <el-button type="primary" @click="submitForm('ruleForm')">保存基本信息</el-button>
+                <el-button type="primary" @click="submitForm()">保存基本信息</el-button>
             </div>
         </div>
 
@@ -71,7 +71,7 @@
                 @close="handleClose(notices, notice)">
                 {{ notice }}
             </el-tag>
-            <el-input class="input-new-tag" v-if="inputNoticeVisible" v-model:value="inputNoticeValue"
+            <el-input class="input-new-tag" v-if="inputNoticeVisible" v-model="inputNoticeValue"
                 ref="saveNoticeInput" size="small" @keyup.enter="handleInputNoticeConfirm"
                 @blur="handleInputNoticeConfirm">
             </el-input>
@@ -97,7 +97,7 @@
                 :type="types[Math.floor(Math.random() * 5)]" @close="handleClose(randomName, name)">
                 {{ name }}
             </el-tag>
-            <el-input class="input-new-tag" v-if="inputRandomNameVisible" v-model:value="inputRandomNameValue"
+            <el-input class="input-new-tag" v-if="inputRandomNameVisible" v-model="inputRandomNameValue"
                 ref="saveRandomNameInput" size="small" @keyup.enter="handleInputRandomNameConfirm"
                 @blur="handleInputRandomNameConfirm">
             </el-input>
@@ -130,7 +130,7 @@
                 </div>
             </div>
 
-            <el-input class="input-new-tag" v-if="inputRandomAvatarVisible" v-model:value="inputRandomAvatarValue"
+            <el-input class="input-new-tag" v-if="inputRandomAvatarVisible" v-model="inputRandomAvatarValue"
                 ref="saveRandomAvatarInput" size="small" @keyup.enter="handleInputRandomAvatarConfirm"
                 @blur="handleInputRandomAvatarConfirm">
             </el-input>
@@ -165,7 +165,7 @@
                 </div>
             </div>
 
-            <el-input class="input-new-tag" v-if="inputRandomCoverVisible" v-model:value="inputRandomCoverValue"
+            <el-input class="input-new-tag" v-if="inputRandomCoverVisible" v-model="inputRandomCoverValue"
                 ref="saveRandomCoverInput" size="small" @keyup.enter="handleInputRandomCoverConfirm"
                 @blur="handleInputRandomCoverConfirm">
             </el-input>
@@ -178,14 +178,14 @@
         </div>
 
         <div>
-            <el-button type="danger" @click="resetForm('ruleForm')">重置所有修改</el-button>
+            <el-button type="danger" @click="resetForm()">重置所有修改</el-button>
         </div>
     </div>
 </template>
 
 <script setup>
 import UploadPicture from '../../components/common/UploadPicture.vue'
-import { nextTick, reactive, inject, toRefs } from 'vue'
+import { nextTick, reactive, inject, toRefs, onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from "element-plus";
 
 // hooks
@@ -194,7 +194,7 @@ const constant = inject("$constant");
 const http = inject("$http");
 
 const data = reactive({
-    types: ['', 'success', 'info', 'danger', 'warning'],
+    types: ['primary', 'success', 'info', 'danger', 'warning'],
     inputNoticeVisible: false,
     inputNoticeValue: '',
     inputRandomNameVisible: false,
@@ -240,6 +240,16 @@ const data = reactive({
     }
 });
 
+const ruleForm = ref(null);
+const saveNoticeInput = ref(null);
+const saveRandomNameInput = ref(null);
+const saveRandomAvatarInput = ref(null);
+const saveRandomCoverInput = ref(null);
+
+onMounted(()=>{
+    getWebInfo();
+})
+
 const getWebInfo = () => {
     http.get(constant.baseURL + '/admin/webInfo/getAdminWebInfo', {}, true)
         .then((res) => {
@@ -265,8 +275,6 @@ const getWebInfo = () => {
         })
 };
 
-getWebInfo();
-
 const addBackgroundImage = (res) => {
     data.webInfo.backgroundImage = res;
 };
@@ -283,8 +291,8 @@ const addRandomCover = (res) => {
     data.randomCover.push(res);
 };
 
-const submitForm = (formName) => {
-    $refs[formName].validate((valid) => {
+const submitForm = () => {
+    ruleForm.value.validate((valid) => {
         if (valid) {
             updateWebInfo(data.webInfo);
         } else {
@@ -296,8 +304,8 @@ const submitForm = (formName) => {
     });
 };
 
-const resetForm = (formName) => {
-    $refs[formName].resetFields();
+const resetForm = () => {
+    ruleForm.value.resetFields();
     getWebInfo();
 };
 
@@ -316,7 +324,7 @@ const handleInputNoticeConfirm = () => {
 const showNoticeInput = () => {
     data.inputNoticeVisible = true;
     nextTick(() => {
-        $refs.saveNoticeInput.$refs.input.focus();
+        saveNoticeInput.value.input.focus();
     });
 };
 
@@ -339,7 +347,7 @@ const handleInputRandomNameConfirm = () => {
 const showRandomNameInput = () => {
     data.inputRandomNameVisible = true;
     nextTick(() => {
-        $refs.saveRandomNameInput.$refs.input.focus();
+        saveRandomNameInput.value.input.focus();
     });
 };
 
@@ -362,7 +370,7 @@ const handleInputRandomAvatarConfirm = () => {
 const showRandomAvatarInput = () => {
     data.inputRandomAvatarVisible = true;
     nextTick(() => {
-        $refs.saveRandomAvatarInput.$refs.input.focus();
+        saveRandomAvatarInput.value.input.focus();
     });
 };
 
@@ -385,7 +393,7 @@ const handleInputRandomCoverConfirm = () => {
 const showRandomCoverInput = () => {
     data.inputRandomCoverVisible = true;
     nextTick(() => {
-        $refs.saveRandomCoverInput.$refs.input.focus();
+        saveRandomCoverInput.value.input.focus();
     });
 };
 
@@ -428,7 +436,7 @@ const updateWebInfo = (value) => {
         });
 };
 
-const {inputNoticeVisible,inputNoticeValue,inputRandomNameValue,inputRandomNameVisible,
+const {types,inputNoticeVisible,inputNoticeValue,inputRandomNameValue,inputRandomNameVisible,
     inputRandomAvatarValue,inputRandomAvatarVisible,inputRandomCoverValue,inputRandomCoverVisible,
     webInfo,notices,randomAvatar,randomName,randomCover,rules
 } = toRefs(data)
@@ -476,5 +484,19 @@ const {inputNoticeVisible,inputNoticeValue,inputRandomNameValue,inputRandomNameV
     border-radius: 2px;
     width: 40px;
     height: 40px;
+}
+
+.el-form-item__content > div {
+    width: 100%;
+}
+
+.el-form-item__content {
+    flex-direction: column;
+}
+
+:deep(.upload-button) {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
 </style>

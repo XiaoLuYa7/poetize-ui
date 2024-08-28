@@ -29,7 +29,7 @@
 
         </el-upload>
 
-        <div style="text-align: center;margin-top: 20px">
+        <div class="upload-button">
             <el-button type="success" style="font-size: 12px" @click="submitUpload">
                 上传
             </el-button>
@@ -38,10 +38,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
+import { ref, inject } from 'vue';
 import ajaxUpload from '../../utils/ajaxUpload';
 import { useStore } from 'vuex';
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 // 定义 Props
 const props = defineProps({
@@ -80,6 +80,7 @@ const emit = defineEmits(['addPicture'])
 const store = useStore()
 const common = inject("$common")
 const constant = inject("$constant")
+const http = inject("$http")
 
 const upload = ref(null)
 
@@ -89,7 +90,7 @@ const qiniuUrl = ref(import.meta.env.VITE_QINIU_UPLOAD_URL);
 // Methods
 const submitUpload = () => {
     if (upload) {
-        upload.submit();
+        upload.value.submit();
     }
 };
 
@@ -187,4 +188,9 @@ const handleChange = (file, fileList) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.upload-button {
+    text-align: center;
+    margin-top: 20px;
+}
+</style>

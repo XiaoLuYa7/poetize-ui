@@ -44,6 +44,7 @@
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { inject } from "vue";
 
 //hooks
 const constant = inject("$constant");

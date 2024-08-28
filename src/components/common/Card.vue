@@ -87,11 +87,11 @@ const clickResourcePath = (resourcePath) => {
     height: 180px;
 }
 
-.card-image>>>.el-image__inner {
+.card-image :deep(.el-image__inner) {
     transition: all 1s;
 }
 
-.card-image>>>.el-image__inner:hover {
+.card-image :deep(.el-image__inner:hover) {
     transform: scale(1.2);
 }
 

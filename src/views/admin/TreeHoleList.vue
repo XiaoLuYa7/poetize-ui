@@ -21,8 +21,7 @@
             <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
             <el-table-column label="操作" width="180" align="center">
                 <template v-slot="scope">
-                    <el-button type="text" icon="el-icon-delete" style="color: var(--orangeRed)"
-                        @click="handleDelete(scope.row)">
+                    <el-button text type="warning" :icon="Delete" class="btn-p5" @click="handleDelete(scope.row)">
                         删除
                     </el-button>
                 </template>
@@ -37,8 +36,9 @@
 </template>
 
 <script setup>
-import { reactive, toRefs } from 'vue';
+import { inject, reactive, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Delete } from '@element-plus/icons-vue';
 
 // hooks
 const common = inject("$common");
@@ -48,7 +48,7 @@ const http = inject("$http");
 const data = reactive({
     pagination: {
         current: 1,
-        size: 10,
+        size: 15,
         total: 0,
     },
     treeHoles: []

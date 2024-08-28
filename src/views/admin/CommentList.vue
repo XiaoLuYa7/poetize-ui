@@ -1,15 +1,17 @@
 <template>
     <div>
-        <div style="margin-bottom: 20px">
-            <el-select v-if="isBoss" v-model:value="pagination.commentType" placeholder="评论来源类型"
-                style="margin-right: 10px">
+        <div style="margin-bottom: 20px" class="handle-box">
+            <span>评论来源类型：</span>
+            <el-select v-if="isBoss" v-model="pagination.commentType" popper-class="custom-popper" filterable clearable
+                placeholder="评论来源类型" style="margin-right: 10px;width: 140px">
                 <el-option key="1" label="文章评论" value="article"></el-option>
                 <el-option key="2" label="树洞留言" value="message"></el-option>
                 <el-option key="3" label="家庭祝福" value="love"></el-option>
             </el-select>
+            <span style="margin-left: 15px">评论来源标识：</span>
             <el-input class="my-input" type="number" style="width: 140px; margin-right: 10px"
-                v-model:value="pagination.source" placeholder="评论来源标识"></el-input>
-            <el-button type="primary" icon="el-icon-search" @click="searchComments()">搜索</el-button>
+                v-model="pagination.source" placeholder="评论来源标识"></el-input>
+            <el-button type="primary" :icon="Search" @click="searchComments()" style="margin-left: 15px">搜索</el-button>
             <el-button type="danger" @click="clearSearch()">清除参数</el-button>
         </div>
         <el-table :data="comments" border class="table" header-cell-class-name="table-header">
@@ -21,8 +23,7 @@
             <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
             <el-table-column label="操作" width="180" align="center">
                 <template v-slot="scope">
-                    <el-button type="text" icon="el-icon-delete" style="color: var(--orangeRed)"
-                        @click="handleDelete(scope.row)">
+                    <el-button text :icon="Delete" type="warning" class="btn-p5" @click="handleDelete(scope.row)">
                         删除
                     </el-button>
                 </template>
@@ -37,10 +38,11 @@
 </template>
 
 <script setup>
-import { reactive, inject , toRefs} from 'vue';
+import { reactive, inject, toRefs, onMounted } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Delete, Search } from '@element-plus/icons-vue';
 
 // hooks
 const common = inject("$common");
@@ -61,6 +63,12 @@ const data = reactive({
     },
     comments: []
 });
+
+
+onMounted(() => {
+    // 初始化获取评论
+    getComments();
+})
 
 // 获取评论列表
 const getComments = () => {
@@ -143,8 +151,6 @@ const handleDelete = (item) => {
         });
 };
 
-// 初始化获取评论
-getComments();
 
 const { isBoss, pagination, comments } = toRefs(data);
 
@@ -156,7 +162,19 @@ const { isBoss, pagination, comments } = toRefs(data);
     text-align: right;
 }
 
-.my-input>>>input::-webkit-inner-spin-button {
+.my-input :deep(input::-webkit-inner-spin-button) {
     appearance: none;
+}
+
+.handle-box>span {
+    font-size: 15px;
+}
+
+.btn-p5 {
+    padding: 5px 5px;
+}
+
+.btn-p5:hover {
+    color: red;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="margin-bottom: 20px">
-            <el-button type="primary" @click="sortDialog = true">新增分类</el-button>
+            <el-button type="success" @click="sortDialog = true">新增分类</el-button>
         </div>
         <el-table :data="sortInfo" border class="table" header-cell-class-name="table-header">
             <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
@@ -17,17 +17,16 @@
             <el-table-column prop="countOfSort" label="文章总数" align="center"></el-table-column>
             <el-table-column label="操作" width="380" align="center">
                 <template v-slot="scope">
-                    <el-button type="text" icon="el-icon-edit" @click="editSort(scope.row)">
+                    <el-button text type="primary" :icon="EditPen" class="btn-p5" @click="editSort(scope.row)">
                         编辑分类
                     </el-button>
-                    <el-button type="text" icon="el-icon-edit" @click="sayLabel(scope.row)">
+                    <el-button text type="primary" :icon="View" class="btn-p5" @click="sayLabel(scope.row)">
                         查看标签
                     </el-button>
-                    <el-button type="text" icon="el-icon-edit" @click="insertLabel(scope.row)">
+                    <el-button text type="success" :icon="CirclePlus" class="btn-p5" @click="insertLabel(scope.row)">
                         新增标签
                     </el-button>
-                    <el-button type="text" icon="el-icon-delete" style="color: var(--orangeRed)"
-                        @click="deleteHandle(scope.row.id, 1)">
+                    <el-button text :icon="Delete" type="warning" class="btn-p5" @click="deleteHandle(scope.row.id, 1)">
                         删除
                     </el-button>
                 </template>
@@ -45,33 +44,32 @@
             <el-table-column prop="countOfLabel" label="文章总数" align="center"></el-table-column>
             <el-table-column label="操作" width="320" align="center">
                 <template v-slot="scope">
-                    <el-button type="text" icon="el-icon-edit" @click="editLabel(scope.row)">
+                    <el-button text type="primary" :icon="EditPen" class="btn-p5" @click="editLabel(scope.row)">
                         编辑标签
                     </el-button>
-                    <el-button type="text" icon="el-icon-delete" style="color: var(--orangeRed)"
-                        @click="deleteHandle(scope.row.id, 2)">
+                    <el-button text :icon="Delete" type="warning" class="btn-p5" @click="deleteHandle(scope.row.id, 2)">
                         删除
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
 
-        <el-dialog title="分类" v-model:visible="sortDialog" width="30%" :before-close="handleClose"
+        <el-dialog title="分类" v-model="sortDialog" width="30%" :before-close="handleClose"
             :append-to-body="true" destroy-on-close center top="25vh">
             <div class="my-dialog">
                 <div class="myCenter">
-                    <el-radio-group v-model:value="sortForHttp.sortType">
+                    <el-radio-group v-model="sortForHttp.sortType">
                         <el-radio-button :value="0">导航栏分类</el-radio-button>
                         <el-radio-button :value="1">普通分类</el-radio-button>
                     </el-radio-group>
                 </div>
-                <el-input placeholder="请输入分类名称" v-model:value="sortForHttp.sortName">
+                <el-input placeholder="请输入分类名称" v-model="sortForHttp.sortName">
                     <template v-slot:prepend>分类名称</template>
                 </el-input>
-                <el-input placeholder="请输入分类描述" v-model:value="sortForHttp.sortDescription">
+                <el-input placeholder="请输入分类描述" v-model="sortForHttp.sortDescription">
                     <template v-slot:prepend>分类描述</template>
                 </el-input>
-                <el-input type="number" placeholder="请输入整数，数字小的在前面" v-model:value="sortForHttp.priority">
+                <el-input type="number" placeholder="请输入整数，数字小的在前面" v-model="sortForHttp.priority">
                     <template v-slot:prepend>分类优先级</template>
                 </el-input>
             </div>
@@ -84,13 +82,13 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="标签" v-model:visible="labelDialog" width="30%" :before-close="handleClose"
+        <el-dialog title="标签" v-model="labelDialog" width="30%" :before-close="handleClose"
             :append-to-body="true" destroy-on-close center top="25vh">
             <div class="my-dialog">
-                <el-input placeholder="请输入标签名称" v-model:value="labelForHttp.labelName">
+                <el-input placeholder="请输入标签名称" v-model="labelForHttp.labelName">
                     <template v-slot:prepend>标签名称</template>
                 </el-input>
-                <el-input placeholder="请输入标签描述" v-model:value="labelForHttp.labelDescription">
+                <el-input placeholder="请输入标签描述" v-model="labelForHttp.labelDescription">
                     <template v-slot:prepend>标签描述</template>
                 </el-input>
             </div>
@@ -108,6 +106,7 @@
 <script setup>
 import { reactive, inject, toRefs } from 'vue';
 import { ElMessage, ElMessageBox } from "element-plus";
+import { CirclePlus, Delete, EditPen, View } from '@element-plus/icons-vue';
 
 // hooks
 const common = inject("$common");
@@ -314,7 +313,7 @@ const { sortDialog, labelDialog, sortInfo, sort, sortForHttp, labelForHttp } = t
     margin: 12px;
 }
 
-.my-dialog>>>input::-webkit-inner-spin-button {
+.my-dialog :deep(input::-webkit-inner-spin-button) {
     appearance: none;
 }
 </style>

@@ -6,10 +6,10 @@
         <div class="myBetween" style="margin-bottom: 10px">
             <div style="display: flex">
                 <div :class="{ 'emoji-active': showEmoji }" @click="showEmoji = !showEmoji">
-                    <i class="el-icon-orange myEmoji"></i>
+                    <el-icon class="myEmoji"><Orange/></el-icon>
                 </div>
                 <div @click="openPicture">
-                    <i class="el-icon-picture myPicture"></i>
+                    <el-icon class="myPicture"><PictureFilled /></el-icon>
                 </div>
             </div>
 
@@ -22,7 +22,7 @@
         <!-- 表情 -->
         <Emoji @addEmoji="addEmoji" :showEmoji="showEmoji"></Emoji>
 
-        <el-dialog title="图片" v-model:visible="showPicture" width="25%" :append-to-body="true"
+        <el-dialog title="图片" v-model="showPicture" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <UploadPicture :prefix="'commentPicture'" @addPicture="addPicture" :maxSize="2" :maxNumber="1">
@@ -36,6 +36,7 @@
 import { reactive, inject, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
+import {PictureFilled,Orange} from '@element-plus/icons-vue'
 
 const http = inject("$http");
 const common = inject("$common");

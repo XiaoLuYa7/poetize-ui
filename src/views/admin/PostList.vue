@@ -1,75 +1,75 @@
 <template>
     <div>
         <div class="handle-box">
-            <el-select v-model:value="pagination.recommendStatus" placeholder="是否推荐" style="width: 120px" class="mrb10">
+            <span>是否推荐：</span>
+            <el-select popper-class="custom-popper" style="width: 140px" filterable clearable v-model="pagination.recommendStatus" placeholder="是否推荐" class="mrb10">
                 <el-option key="1" label="是" :value="true"></el-option>
                 <el-option key="2" label="否" :value="false"></el-option>
             </el-select>
-            <el-select style="width: 140px" class="mrb10" v-model:value="pagination.sortId" placeholder="请选择分类">
+            <span style="margin-left: 10px">分类：</span>
+            <el-select popper-class="custom-popper" filterable clearable style="width: 140px" class="mrb10" v-model="pagination.sortId" placeholder="请选择分类">
                 <el-option v-for="item in sorts" :key="item.id" :label="item.sortName" :value="item.id">
                 </el-option>
             </el-select>
-            <el-select style="width: 140px" class="mrb10" v-model:value="pagination.labelId" placeholder="请选择标签">
+            <span style="margin-left: 10px">标签：</span>
+            <el-select popper-class="custom-popper" filterable clearable style="width: 140px" class="mrb10" v-model="pagination.labelId" placeholder="请选择标签">
                 <el-option v-for="item in labelsTemp" :key="item.id" :label="item.labelName" :value="item.id">
                 </el-option>
             </el-select>
-            <el-input v-model:value="pagination.searchKey" placeholder="文章标题" class="handle-input mrb10"></el-input>
-            <el-button type="primary" icon="el-icon-search" @click="searchArticles()">搜索</el-button>
+            <span style="margin-left: 10px">文章标题：</span>
+            <el-input v-model="pagination.searchKey" placeholder="文章标题" style="width: 140px" class="handle-input mrb10"></el-input>
+            <el-button type="primary" :icon="Search" @click="searchArticles()" style="margin-left: 10px">搜索</el-button>
             <el-button type="danger" @click="clearSearch()">清除参数</el-button>
-            <el-button type="primary" @click="router.push({ path: '/postEdit' })">新增文章</el-button>
+            <el-button type="success" @click="router.push({ path: '/postEdit' })">新增文章</el-button>
         </div>
         <el-table :data="articles" border class="table" header-cell-class-name="table-header">
             <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
             <el-table-column prop="username" label="作者" align="center"></el-table-column>
-            <el-table-column prop="articleTitle" label="文章标题" align="center"></el-table-column>
-            <el-table-column prop="sort.sortName" label="分类" align="center"></el-table-column>
-            <el-table-column prop="label.labelName" label="标签" align="center"></el-table-column>
-            <el-table-column prop="viewCount" label="浏览量" align="center"></el-table-column>
-            <el-table-column label="是否可见" align="center">
+            <el-table-column prop="articleTitle" width="250" label="文章标题" align="center"></el-table-column>
+            <el-table-column prop="sort.sortName" width="120" label="分类" align="center"></el-table-column>
+            <el-table-column prop="label.labelName" width="120" label="标签" align="center"></el-table-column>
+            <el-table-column prop="viewCount" width="120" label="浏览量" align="center"></el-table-column>
+            <el-table-column label="是否可见" width="120" align="center">
                 <template v-slot="scope">
                     <el-tag :type="scope.row.viewStatus === false ? 'danger' : 'success'" disable-transitions>
                         {{ scope.row.viewStatus === false ? '不可见' : '可见' }}
                     </el-tag>
-                    <el-switch @click="changeStatus(scope.row, 1)" v-model:value="scope.row.viewStatus"></el-switch>
+                    <el-switch @click="changeStatus(scope.row, 1)" v-model="scope.row.viewStatus"></el-switch>
                 </template>
             </el-table-column>
-            <el-table-column label="封面" align="center">
+            <el-table-column width="120" label="封面" align="center">
                 <template v-slot="scope">
                     <el-image lazy class="table-td-thumb" :src="scope.row.articleCover" fit="cover"></el-image>
                 </template>
             </el-table-column>
-            <el-table-column label="是否启用评论" align="center">
+            <el-table-column width="120" label="是否启用评论" align="center">
                 <template v-slot="scope">
                     <el-tag :type="scope.row.commentStatus === false ? 'danger' : 'success'" disable-transitions>
                         {{ scope.row.commentStatus === false ? '否' : '是' }}
                     </el-tag>
-                    <el-switch @click="changeStatus(scope.row, 2)" v-model:value="scope.row.commentStatus"></el-switch>
+                    <el-switch @click="changeStatus(scope.row, 2)" v-model="scope.row.commentStatus"></el-switch>
                 </template>
             </el-table-column>
-            <el-table-column label="是否推荐" align="center">
+            <el-table-column width="120" label="是否推荐" align="center">
                 <template v-slot="scope">
                     <el-tag :type="scope.row.recommendStatus === false ? 'danger' : 'success'" disable-transitions>
                         {{ scope.row.recommendStatus === false ? '否' : '是' }}
                     </el-tag>
-                    <el-switch @click="changeStatus(scope.row, 3)"
-                        v-model:value="scope.row.recommendStatus"></el-switch>
+                    <el-switch @click="changeStatus(scope.row, 3)" v-model="scope.row.recommendStatus"></el-switch>
                 </template>
             </el-table-column>
             <el-table-column prop="commentCount" label="评论数" align="center"></el-table-column>
-            <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
-            <el-table-column prop="updateTime" label="最终修改时间" align="center"></el-table-column>
-            <el-table-column label="操作" width="180" align="center">
+            <el-table-column prop="createTime" label="创建时间" width="200" align="center"></el-table-column>
+            <el-table-column prop="updateTime" label="最终修改时间" width="200" align="center"></el-table-column>
+            <el-table-column fixed="right" label="操作" width="180" align="center">
                 <template v-slot="scope">
-                    <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-                    <el-button type="text" icon="el-icon-delete" style="color: var(--orangeRed)"
-                        @click="handleDelete(scope.row)">
-                        删除
-                    </el-button>
+                    <el-button text :icon="EditPen" type="primary" class="btn-p5" @click="handleEdit(scope.row)">编辑</el-button>
+                    <el-button text :icon="Delete" type="warning" class="btn-p5" @click="handleDelete(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
         <div class="pagination">
-            <el-pagination background layout="total, prev, pager, next" :current-page="pagination.current"
+            <el-pagination :hide-on-single-page="true" background layout="total, prev, pager, next" :current-page="pagination.current"
                 :page-size="pagination.size" :total="pagination.total" @current-change="handlePageChange">
             </el-pagination>
         </div>
@@ -77,10 +77,11 @@
 </template>
 
 <script setup>
-import { reactive, watch, inject, toRefs } from 'vue';
+import { reactive, watch, inject, toRefs, onMounted } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Delete, EditPen, Search } from '@element-plus/icons-vue';
 
 // hooks
 const common = inject("$common");
@@ -113,6 +114,12 @@ watch(() => data.pagination.sortId, (newVal) => {
         data.labelsTemp = data.labels.filter((l) => l.sortId === newVal);
     }
 });
+
+onMounted(() => {
+    // 初始化加载
+    getArticles();
+    getSortAndLabel();
+})
 
 const getSortAndLabel = () => {
     http.get(constant.baseURL + '/webInfo/listSortAndLabel')
@@ -254,9 +261,6 @@ const handleEdit = (item) => {
     router.push({ path: '/postEdit', query: { id: item.id } });
 };
 
-// 初始化加载
-getArticles();
-getSortAndLabel();
 
 const { isBoss, pagination, articles, sorts, labels, labelsTemp } = toRefs(data);
 
@@ -264,7 +268,11 @@ const { isBoss, pagination, articles, sorts, labels, labelsTemp } = toRefs(data)
 
 <style scoped>
 .handle-box {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.handle-box > span {
+    font-size: 15px;
 }
 
 .handle-input {
@@ -279,7 +287,6 @@ const { isBoss, pagination, articles, sorts, labels, labelsTemp } = toRefs(data)
 
 .mrb10 {
     margin-right: 10px;
-    margin-bottom: 10px;
 }
 
 .table-td-thumb {

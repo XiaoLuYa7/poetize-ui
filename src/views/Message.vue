@@ -22,7 +22,16 @@
             </div>
             <!-- 弹幕 -->
             <div class="barrage-container">
-                <vue-baberrage :barrageList="barrageList" :loop="true"></vue-baberrage>
+                <vue-danmaku v-model:danmus="danmus" ref="danmakuRef" randomChannel isSuspend useSlot :speeds="140" loop
+                    style="height:90%; width:100%;margin-top: 2%;">
+                    <template v-slot:dm="{ danmu }">
+                        <div
+                            :class="(isLogin && store.state.currentUser.id == danmu.userId) ? 'danmu-div-self' : 'danmu-div'">
+                            <el-avatar :src="danmu.avatar" :size="32" />
+                            <span class="font-class">{{ danmu.msg }}</span>
+                        </div>
+                    </template>
+                </vue-danmaku>
             </div>
         </div>
         <div class="comment-wrap">
@@ -37,9 +46,10 @@
 <script setup>
 import MyFooter from '../components/common/MyFooter.vue';
 import Comment from '../components/comment/Comment.vue';
-import { reactive, inject, toRefs } from 'vue';
+import { reactive, inject, toRefs, onMounted, ref } from 'vue';
 import { useStore } from "vuex";
 import { ElMessage } from "element-plus";
+import vueDanmaku from 'vue3-danmaku'
 
 // hooks
 const common = inject("$common");
@@ -51,21 +61,27 @@ const store = useStore();
 const data = reactive({
     show: false,
     messageContent: '',
-    barrageList: [],
+    danmus: [],
+    isLogin: !common.isEmpty(store.state.currentUser)
 });
 
-getTreeHole();
+const danmakuRef = ref(null)
+
+
+
+onMounted(() => {
+    getTreeHole();
+})
 
 const getTreeHole = () => {
     http.get(constant.baseURL + '/webInfo/listTreeHole')
         .then((res) => {
             if (!common.isEmpty(res.data)) {
                 res.data.forEach((m) => {
-                    data.barrageList.push({
-                        id: m.id,
+                    data.danmus.push({
+                        userId: m.userId,
                         avatar: m.avatar,
-                        msg: m.message,
-                        time: Math.floor(Math.random() * 5 + 10),
+                        msg: m.message
                     });
                 });
             }
@@ -91,21 +107,18 @@ const submitMessage = () => {
         message: data.messageContent.trim(),
     };
 
-    if (
-        !common.isEmpty(store.state.currentUser) &&
-        !common.isEmpty(store.state.currentUser.avatar)
-    ) {
+    if (!common.isEmpty(store.state.currentUser) && !common.isEmpty(store.state.currentUser.avatar)) {
         treeHole.avatar = store.state.currentUser.avatar;
+        treeHole.userId = store.state.currentUser.id;
     }
 
     http.post(constant.baseURL + '/webInfo/saveTreeHole', treeHole)
         .then((res) => {
             if (!common.isEmpty(res.data)) {
-                data.barrageList.push({
-                    id: res.data.id,
+                data.danmus.push({
+                    userId: res.data.userId,
                     avatar: res.data.avatar,
-                    msg: res.data.message,
-                    time: Math.floor(Math.random() * 5 + 10),
+                    msg: res.data.message
                 });
             }
         })
@@ -119,7 +132,7 @@ const submitMessage = () => {
     data.messageContent = '';
     data.show = false;
 };
-const { show, messageContent, barrageList } = toRefs(data)
+const { show, messageContent, danmus, isLogin } = toRefs(data)
 </script>
 
 <style scoped>
@@ -128,10 +141,11 @@ const { show, messageContent, barrageList } = toRefs(data)
     left: 50%;
     top: 40%;
     transform: translate(-50%, -50%);
-    color: var(--white);
+    color: #ff8cb0;
     animation: hideToShow 2.5s;
     width: 360px;
     z-index: 10;
+    padding: 25px 25px 25px 25px;
 }
 
 .message-title {
@@ -141,14 +155,14 @@ const { show, messageContent, barrageList } = toRefs(data)
 
 .message-input {
     border-radius: 1.2rem;
-    border: var(--white) 1px solid;
-    color: var(--white);
+    border: #ff8cb0 1px solid;
+    color: #ff8cb0;
     background: var(--transparent);
     padding: 10px 10px;
 }
 
 .message-input::-webkit-input-placeholder {
-    color: var(--white);
+    color: #ff8cb0;
 }
 
 .barrage-container {
@@ -161,6 +175,7 @@ const { show, messageContent, barrageList } = toRefs(data)
     width: 100%;
     user-select: none;
     overflow: hidden;
+    z-index: 1;
 }
 
 .comment-wrap {
@@ -174,5 +189,37 @@ const { show, messageContent, barrageList } = toRefs(data)
     max-width: 800px;
     margin: 0 auto;
     padding: 40px 20px;
+}
+
+.danmu-div {
+    background-color: rgba(0, 0, 0, 0.7);/* 黑色透明背景，50% 不透明度 */
+    border-radius: 40px;/* 圆角 */
+    color: white;/* 字体颜色为白色 */
+    max-width: 100%;/* 设置最大宽度为 100%，防止过宽 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);/* 可选：添加一个阴影效果 */
+    display: inline-flex; /* 使 div 的宽度根据内容自动调整 */
+    align-items: center;/* 垂直居中 */
+    justify-content: center;/* 水平居中 */
+    padding: 5px 10px;/* 上下间距10px，左右间距20px，确保文字远离圆角 */
+    overflow: hidden;/* 隐藏超出圆角区域的文字 */
+}
+
+.danmu-div-self {
+    background-color: rgba(0, 0, 0, 0.7); /* 黑色透明背景，50% 不透明度 */
+    border-radius: 40px;/* 圆角 */
+    color: white;/* 字体颜色为白色 */
+    max-width: 100%;/* 设置最大宽度为 100%，防止过宽 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);/* 可选：添加一个阴影效果 */
+    display: inline-flex;/* 使 div 的宽度根据内容自动调整 */
+    align-items: center;/* 垂直居中 */
+    justify-content: center;/* 水平居中 */
+    padding: 5px 10px;/* 上下间距10px，左右间距20px，确保文字远离圆角 */
+    overflow: hidden;/* 隐藏超出圆角区域的文字 */
+    border: 2px solid white; /* 白色边框，宽度为 2px */
+}
+
+.font-class {
+    padding-left: 10px;
+    font-size: 16px;
 }
 </style>

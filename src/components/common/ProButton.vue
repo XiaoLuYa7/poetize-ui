@@ -34,7 +34,7 @@ const afterColor = computed(() => ({ background: props.after }));
     cursor: pointer;
     user-select: none;
     position: relative;
-    width: 66px;
+    width: 88px;
     height: 33px;
     border-radius: 4px;
     color: var(--white);
@@ -43,7 +43,7 @@ const afterColor = computed(() => ({ background: props.after }));
 }
 
 .myButton div {
-    width: 66px;
+    width: 88px;
     height: 33px;
     line-height: 33px;
     border-radius: 4px;

@@ -3,7 +3,7 @@
         <!-- 评论框 -->
         <div style="margin-bottom: 40px">
             <div class="comment-head">
-                <i class="el-icon-edit-outline" style="font-weight: bold; font-size: 22px"></i>
+                <el-icon style="font-weight: bold; font-size: 22px"><Edit/></el-icon>
                 留言
             </div>
             <div>
@@ -140,7 +140,7 @@
             <i>来发第一个留言啦~</i>
         </div>
 
-        <el-dialog title="留言" v-model:visible="replyDialogVisible" width="40%" :before-close="handleClose"
+        <el-dialog title="留言" v-model="replyDialogVisible" width="40%" :before-close="handleClose"
             :append-to-body="true" :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <CommentBox @submitComment="submitReply"></CommentBox>
@@ -152,10 +152,11 @@
 
 
 <script setup>
-import { ref, reactive, onMounted, nextTick, watch, inject, toRefs } from 'vue';
+import { reactive, onMounted, nextTick, watch, inject, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import CommentBox from './CommentBox.vue';
+import {Edit} from '@element-plus/icons-vue'
 
 // Inject dependencies
 const http = inject('$http');

@@ -24,11 +24,11 @@
             <MyFooter :showFooter="showFooter"></MyFooter>
         </div>
 
-        <el-dialog title="朋友圈" v-model:visible="weiYanDialogVisible" width="40%" :before-close="handleClose"
+        <el-dialog title="朋友圈" v-model="weiYanDialogVisible" width="40%" :before-close="handleClose"
             :append-to-body="true" destroy-on-close :close-on-click-modal="false" center top="25vh">
             <div>
                 <div class="myCenter" style="padding-bottom: 20px; position: relative">
-                    <el-radio-group v-model:value="isPublic" class="radio-group-center">
+                    <el-radio-group v-model="isPublic" class="radio-group-center">
                         <el-radio-button :value="true">公开</el-radio-button>
                         <el-radio-button :value="false">私密</el-radio-button>
                     </el-radio-group>

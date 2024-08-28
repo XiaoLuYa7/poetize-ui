@@ -1,29 +1,27 @@
 <template>
     <div>
-        <MyHeader></MyHeader>
-        <Sidebar></Sidebar>
-        <div class="content-box">
-            <div class="content">
-                <router-view></router-view>
+        <el-config-provider :locale="zhCn">
+            <MyHeader></MyHeader>
+            <Sidebar></Sidebar>
+            <div class="content-box">
+                <div class="content">
+                    <router-view></router-view>
+                </div>
             </div>
-        </div>
+        </el-config-provider>
+
     </div>
 </template>
 
 <script setup>
 import MyHeader from './common/MyHeader.vue'
 import Sidebar from './common/Sidebar.vue'
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
-import { ElMessage } from "element-plus";
+import zhCn from "element-plus/es/locale/lang/zh-cn"
 
-//hooks
-const common = inject("$common");
-const constant = inject("$constant");
-const http = inject("$http");
+// 修改分页器默认文字
+zhCn.el.pagination.total = "总计：" + `{total}` + "条"
+// zhCn.el.pagination.goto = "跳转至"
 
-const store = useStore();
-const router = useRouter();
 
 let root = document.querySelector(':root')
 let webStaticResourcePrefix = import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX
@@ -38,23 +36,6 @@ const font = new FontFace(
 font.load()
 document.fonts.add(font)
 
-const verifyToken = () => {
-    let adminToken = common.encrypt(localStorage.getItem('adminToken'))
-    // 跳转之前判断用户token是否正常，是否过期
-    http.get(constant.baseURL + '/user/verifyToken',{ token: adminToken },false,false)
-        .then((res) => {
-            return res.data
-        })
-        .catch((error) => {
-            ElMessage({
-                message: error.message,
-                type: 'error',
-            })
-            store.commit('loadCurrentAdmin', {})
-            localStorage.removeItem('adminToken')
-            router.push({ path: '/' })
-        })
-}
 </script>
 
 <style scoped>

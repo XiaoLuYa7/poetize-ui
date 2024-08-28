@@ -4,7 +4,7 @@
             :key="index" @click="router.push({ path: `/article/${article.id}` })">
             <!-- 封面 -->
             <div class="recent-post-item-image">
-                <el-image class="my-el-image" v-once lazy :src="article.articleCover" fit="cover">
+                <el-image class="my-el-image" lazy :src="article.articleCover" fit="cover">
                     <template v-slot:error>
                         <div class="image-slot myCenter" style="background-color: var(--lightGreen)">
                             <div class="error-text">
@@ -174,11 +174,11 @@ const props = defineProps({
     position: relative;
 }
 
-.recent-post-item-image>>>.el-image__inner {
+.recent-post-item-image :deep(.el-image__inner) {
     transition: all 1s;
 }
 
-.recent-post-item-image>>>.el-image__inner:hover {
+.recent-post-item-image :deep(.el-image__inner:hover) {
     transform: scale(1.2);
 }
 

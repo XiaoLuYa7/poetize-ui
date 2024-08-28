@@ -18,14 +18,12 @@ import './assets/css/markdown-highlight.css';
 import './assets/css/font-awesome.min.css';
 import './assets/css/vditor-custom.css';
 
-import { vueBaberrage } from 'vue-baberrage';
 
 const app = createApp(App);
 
 app.use(router);
 app.use(store);
 app.use(ElementPlus);
-app.use(vueBaberrage);
 
 app.provide('$http',http);
 app.provide('$common',common);

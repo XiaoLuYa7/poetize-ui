@@ -162,7 +162,7 @@
           <!-- 搜索 -->
           <div style="display: flex; flex-direction: row; align-items: center">
             <el-input
-              v-model:value="showFriendValue"
+              v-model="showFriendValue"
               placeholder="搜索"
               class="custom-input"
             >
@@ -735,7 +735,7 @@
             </div>
             <div>
               <n-input
-                v-model:value="changeData"
+                v-model="changeData"
                 maxlength="30"
                 show-count
                 clearable
@@ -810,7 +810,7 @@
         >
           <div class="weiyan-edit">
             <div class="myCenter" style="padding-bottom: 20px">
-              <el-radio-group v-model:value="isPublic">
+              <el-radio-group v-model="isPublic">
                 <el-radio-button :value="true">公开</el-radio-button>
                 <el-radio-button :value="false">私密</el-radio-button>
               </el-radio-group>
@@ -825,12 +825,12 @@
             <div class="email-title">请绑定邮箱，接收留言通知</div>
             <div>
               <div style="margin-bottom: 5px">邮箱：</div>
-              <n-input v-model:value="email"></n-input>
+              <n-input v-model="email"></n-input>
               <div style="margin-top: 10px; margin-bottom: 5px">验证码：</div>
-              <n-input v-model:value="code"></n-input>
+              <n-input v-model="code"></n-input>
               <div style="margin-top: 10px; margin-bottom: 5px">密码：</div>
               <n-input
-                v-model:value="password"
+                v-model="password"
                 type="password"
                 show-password-on="mousedown"
               ></n-input>
@@ -1532,7 +1532,7 @@ export default {
   font-size: 15px;
 }
 
-.body-left >>> .n-divider .n-divider__title {
+.body-left  :deep( .n-divider .n-divider__title) {
   color: var(--greyFont);
   font-size: 12px;
   letter-spacing: 2px;

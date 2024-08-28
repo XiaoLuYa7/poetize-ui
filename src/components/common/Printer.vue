@@ -17,7 +17,7 @@ const props = defineProps({
     // 速度
     duration: {
         type: Number,
-        default: 80,
+        default: 100,
     },
     // 延迟
     delay: {
@@ -76,10 +76,10 @@ const work = () => {
 
 const toBegin = () => {
     data.cursor = 0;
-    if (timeout !== null) {
-        clearTimeout(timeout);
-        if (timer !== null) {
-            clearInterval(timer);
+    if (data.timeout !== null) {
+        clearTimeout(data.timeout);
+        if (data.timer !== null) {
+            clearInterval(data.timer);
         }
     }
     if (props.working) {
@@ -99,7 +99,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-    clearInterval(timer);
+    clearInterval(data.timer);
 });
 
 // watchers

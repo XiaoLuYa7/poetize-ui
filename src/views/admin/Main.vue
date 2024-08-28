@@ -211,15 +211,16 @@ getHistoryInfo();
     margin: 20px auto 0;
 }
 
-.history-info>>>.el-table .cell {
+.history-info :deep(.el-table .cell) {
     line-height: unset;
 }
 
-.history-avatar>>>.el-table .el-table__row .el-table__cell {
+.history-avatar :deep(.el-table .el-table__row .el-table__cell) {
     padding: 3.5px 0;
 }
 
-.history-info>>>.el-table::before {
+.history-info :deep(.el-table::before) {
     height: unset;
 }
+
 </style>

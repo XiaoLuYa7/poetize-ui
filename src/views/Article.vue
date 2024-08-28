@@ -153,7 +153,7 @@
                     </blockquote>
                     <!-- 订阅 -->
                     <div class="myCenter" id="article-like" @click="subscribeLabel()">
-                        <i class="el-icon-thumb article-like-icon" :class="{ 'article-like': subscribe }"></i>
+                        <el-icon class="article-like-icon" :class="{ 'article-like': subscribe }"><Pointer/></el-icon>
                     </div>
 
                     <!-- 评论 -->
@@ -176,7 +176,7 @@
             <i class="fa fa-align-justify" aria-hidden="true"></i>
         </div>
 
-        <el-dialog title="版权声明" v-model:visible="copyrightDialogVisible" width="80%" :append-to-body="true"
+        <el-dialog title="版权声明" v-model="copyrightDialogVisible" width="80%" :append-to-body="true"
             class="article-copy" center top="25vh">
             <div style="display: flex; align-items: center; flex-direction: column">
                 <el-avatar shape="square" :size="35" :src="store.state.webInfo.avatar"></el-avatar>
@@ -243,11 +243,11 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="最新进展" v-model:visible="weiYanDialogVisible" width="40%" :append-to-body="true"
+        <el-dialog title="最新进展" v-model="weiYanDialogVisible" width="40%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <div class="myCenter" style="margin-bottom: 20px">
-                    <el-date-picker v-model:value="newsTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime"
+                    <el-date-picker v-model="newsTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime"
                         align="center" placeholder="选择日期时间">
                     </el-date-picker>
                 </div>
@@ -256,14 +256,14 @@
         </el-dialog>
 
         <!-- 微信 -->
-        <el-dialog title="密码" :modal="false" v-model:visible="showPasswordDialog" width="25%" :append-to-body="true"
+        <el-dialog title="密码" :modal="false" v-model="showPasswordDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <div>
                     <div class="password-content">{{ tips }}</div>
                 </div>
                 <div style="margin: 20px auto">
-                    <el-input maxlength="30" v-model:value="password"></el-input>
+                    <el-input maxlength="30" v-model="password"></el-input>
                 </div>
                 <div style="display: flex; justify-content: center">
                     <ProButton :info="'提交'" @click="submitPassword()" :before="constant.before_color_2"
@@ -292,6 +292,8 @@ import multimdTablePlugin from 'markdown-it-multimd-table';
 
 import { reactive, inject, toRefs, nextTick, onMounted, onUnmounted, watch } from 'vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
+
+import {Pointer} from '@element-plus/icons-vue'
 import { useStore } from 'vuex';
 
 const route = useRoute();
@@ -978,14 +980,14 @@ blockquote {
     left: calc(95% - 20px);
 }
 
-.process-wrap>>>.el-collapse-item__header {
+.process-wrap :deep(.el-collapse-item__header) {
     border-bottom: unset;
     font-size: 20px;
     background-color: var(--background);
     color: var(--lightGreen);
 }
 
-.process-wrap>>>.el-collapse-item__wrap {
+.process-wrap :deep(.el-collapse-item__wrap) {
     background-color: var(--background);
 }
 
@@ -994,7 +996,7 @@ blockquote {
     border-bottom: unset;
 }
 
-.process-wrap>>>.el-collapse-item__wrap {
+.process-wrap :deep(.el-collapse-item__wrap) {
     border-bottom: unset;
 }
 

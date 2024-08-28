@@ -2,11 +2,12 @@
     <div>
         <div>
             <div class="handle-box">
-                <el-select clearable v-model:value="pagination.status" placeholder="状态" class="handle-select mrb10">
+                <span>状态：</span>
+                <el-select clearable v-model="pagination.status" popper-class="custom-popper" filterable placeholder="状态" class="handle-select" style="margin-right: 10px">
                     <el-option key="1" label="启用" :value="true"></el-option>
                     <el-option key="2" label="禁用" :value="false"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
+                <el-button type="primary" :icon="Search" @click="search()" style="margin-left: 15px">搜索</el-button>
             </div>
             <el-table :data="loves" border class="table" header-cell-class-name="table-header">
                 <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
@@ -39,7 +40,7 @@
                         <el-tag :type="scope.row.status === false ? 'danger' : 'success'" disable-transitions>
                             {{ scope.row.status === false ? '禁用' : '启用' }}
                         </el-tag>
-                        <el-switch @click="changeStatus(scope.row)" v-model:value="scope.row.status"></el-switch>
+                        <el-switch @click="changeStatus(scope.row)" v-model="scope.row.status"></el-switch>
                     </template>
                 </el-table-column>
 
@@ -51,8 +52,7 @@
                 <el-table-column prop="updateTime" label="最终修改时间" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template v-slot="scope">
-                        <el-button type="text" icon="el-icon-delete" style="color: var(--orangeRed)"
-                            @click="handleDelete(scope.row)">
+                        <el-button text type="warning" class="btn-p5" :icon="Delete" @click="handleDelete(scope.row)">
                             删除
                         </el-button>
                     </template>
@@ -70,6 +70,7 @@
 <script setup>
 import { reactive, toRefs, inject } from 'vue';
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Delete, Search } from '@element-plus/icons-vue';
 
 // hooks
 const common = inject("$common");
@@ -172,6 +173,10 @@ const { pagination, loves } = toRefs(data);
 <style scoped>
 .handle-box {
     margin-bottom: 20px;
+}
+
+.handle-box > span {
+    font-size: 15px;
 }
 
 .handle-select {

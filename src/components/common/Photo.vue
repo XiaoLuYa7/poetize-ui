@@ -32,7 +32,7 @@
                 class="photo-card-item wow shadow-box-mini">
                 <div class="photo-card-image">
                     <el-image class="my-el-image" v-once :preview-src-list="[resourcePath.cover]"
-                        :src="resourcePath.cover" fit="cover">
+                        :src="resourcePath.cover" :preview-teleported="true"  fit="cover">
                         <template #error>
                             <div class="image-slot"></div>
                         </template>
@@ -99,11 +99,11 @@ const photoContainer = computed(() => ({
     margin-bottom: 1rem;
 }
 
-.photo-type-1 .photo-card-image>>>.el-image__inner {
+.photo-type-1 .photo-card-image :deep(.el-image__inner) {
     transition: all 1s;
 }
 
-.photo-type-1 .photo-card-image>>>.el-image__inner:hover {
+.photo-type-1 .photo-card-image :deep(.el-image__inner:hover) {
     transform: scale(1.2);
 }
 

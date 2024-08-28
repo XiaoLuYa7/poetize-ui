@@ -162,6 +162,22 @@ body {
     box-shadow: 0 5px 10px 5px var(--borderHoverColor);
 }
 
+.btn-p5 {
+    padding: 5px 5px;
+}
+
+.btn-p5:hover {
+    color: red;
+}
+
+.custom-popper{
+    background-color: #fff !important;
+}
+
+.el-select-dropdown__item.is-hovering {
+    background-color: rgb(214, 213, 213);
+}
+
 /* el弹出框样式 */
 .el-message {
     top: 80px !important;
@@ -209,6 +225,7 @@ body {
 .el-upload-dragger {
     width: 100% !important;
     height: 100px !important;
+    padding: 0;
 }
 
 /* 导航栏 */
@@ -246,7 +263,6 @@ body {
     cursor: pointer;
 }
 
-
 .my-tooltip {
     background-color: var(--lightGreen) !important;
     border-radius: 10px;
@@ -263,6 +279,11 @@ body {
 .el-input__inner,
 .el-textarea__inner {
     font-family: var(--globalFont), serif;
+    color: black;
+}
+
+.el-select__input {
+    color: black;
 }
 
 input {
@@ -459,7 +480,6 @@ button {
     margin: 0;
 }
 
-
 .el-pagination.is-background .el-pager li:not(.disabled):hover {
     color: #409eff;
 }
@@ -498,11 +518,100 @@ button {
     cursor: default;
 }
 
+.el-dropdown-menu__item {
+    padding: 0px 10px !important;
+    font-size: 14px;
+}
+
+.el-dropdown {
+    font-size: unset;
+    color: unset;
+}
+
+.el-popper[data-popper-placement="bottom"] {
+    margin-top: -18px;
+}
+
+.el-popper[data-popper-placement="bottom-start"] {
+    margin-top: -8px;
+}
+
+.el-popper {
+    border-radius: 8px;
+}
+
+.el-popper.is-light {
+    background-color: hsla(0, 0%, 100%, 0.2) !important;
+    border: none;
+    backdrop-filter: blur(20px);
+}
+
+.el-popper.is-light .el-popper__arrow:before {
+    background-color: hsla(0, 0%, 100%, 0.3)  !important;
+    border: none;
+}
+
+.el-dropdown-menu {
+    background-color: hsla(0, 0%, 100%, 0.2) !important;
+    border-radius: 8px;
+    border: unset;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/*黑色边框*/
+.el-tooltip__trigger:focus-visible {
+    outline: unset;
+  }
+
+.dropdown-menu-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 130px;
+    color: rgba(0, 0, 0, 0.5647058823529412);
+    font-weight: 700;
+    padding: 6px 8px;
+    text-align: center;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12549019607843137);
+    border-radius: 8px;
+    margin: 5px 0px;
+    background-color: hsla(0, 0%, 100%, 0.6);
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu-item:hover {
+    background-color: hsla(198, 64%, 62%, 0.565);
+}
+
+.el-dropdown-menu__item:hover {
+    background-color: unset !important;
+    color: unset;
+}
+
+.el-popper .el-popper__arrow,
+.el-popper .el-popper__arrow:after {
+    border-bottom-color: hsla(0, 4%, 89%, 0.349);
+}
+
 .proPage .btn-next,
 .proPage .btn-prev,
 .proPage .more,
 .proPage .number {
     border-radius: 8px !important;
+}
+
+.el-pagination .btn-next,
+.el-pagination .btn-prev,
+.el-pager > .number {
+    border-radius: 8px !important;
+}
+
+.el-pagination.is-background .btn-next.is-active, .el-pagination.is-background .btn-prev.is-active, .el-pagination.is-background .el-pager li.is-active {
+    background-color: #9971ac;
+    color: var(--el-color-white);
 }
 
 .proPage .btn-next,
@@ -520,6 +629,12 @@ button {
     background-color: #2b5aed !important;
     color: var(--white) !important;
 }
+
+.el-select__placeholder {
+    color: black;
+}
+
+
 
 @media screen and (max-width: 400px) {
     .proPage .btn-next,

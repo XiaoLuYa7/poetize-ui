@@ -2,21 +2,22 @@
     <div class="sidebar">
         <div @click="collapse()"
             style="color: rgb(96, 98, 102);cursor: pointer;background-color: #ebf1f6;display: flex;">
-            <i class="el-icon-menu" style="margin: 14px; font-size: 17px"></i>
+            <el-icon style="margin: 14px; font-size: 17px">
+                <Menu />
+            </el-icon>
             <div style="font-size: 15px; margin-top: 13px">折叠</div>
         </div>
-        <el-menu class="sidebar-el-menu" background-color="#ebf1f6" text-color="#606266" active-text-color="#20a0ff"
-            unique-opened :default-active="router.currentRoute.path" router>
+        <el-menu class="sidebar-el-menu"  unique-opened :default-active="router.currentRoute.value.path" router collapse-transition>
             <template v-for="item in items">
                 <template v-if="isBoss || !item.isBoss">
                     <template v-if="item.subs">
-                        <el-submenu :index="item.index" :key="item.index">
+                        <el-sub-menu :index="item.index" :key="item.index">
                             <template v-slot:title>
-                                <i :class="item.icon"></i>
+                                <el-icon><component :is="item.icon"></component></el-icon>
                                 <span>{{ item.title }}</span>
                             </template>
                             <template v-for="(subItem, index) in item.subs" :key="index">
-                                <el-submenu v-if="subItem.subs" :index="subItem.index">
+                                <el-sub-menu v-if="subItem.subs" :index="subItem.index">
                                     <template v-slot:title>
                                         {{ subItem.title }}
                                     </template>
@@ -24,16 +25,16 @@
                                         :index="threeItem.index">
                                         {{ threeItem.title }}
                                     </el-menu-item>
-                                </el-submenu>
+                                </el-sub-menu>
                                 <el-menu-item v-else :index="subItem.index">
                                     {{ subItem.title }}
                                 </el-menu-item>
                             </template>
-                        </el-submenu>
+                        </el-sub-menu>
                     </template>
                     <template v-else>
                         <el-menu-item :index="item.index" :key="item.index">
-                            <i :class="item.icon"></i>
+                            <el-icon><component :is="item.icon"></component></el-icon>
                             {{ item.title }}
                         </el-menu-item>
                     </template>
@@ -44,9 +45,10 @@
 </template>
 
 <script setup>
-import { reactive, toRefs } from 'vue';
+import { onMounted, reactive, shallowRef, toRefs } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { Menu, SwitchFilled, Setting, User, Postcard, Notebook, Edit, ChatLineRound, Paperclip, CreditCard, Sugar  } from '@element-plus/icons-vue';
 
 const store = useStore();
 const router = useRouter();
@@ -54,69 +56,72 @@ const router = useRouter();
 const data = reactive({
     isCollapse: true,
     isBoss: store.state.currentAdmin.isBoss,
-    items: [
+
+})
+
+// 自定义组件如果是一个响应式对象可能会造成性能开销 可以使用shallowRef
+const items = shallowRef([
         {
-            icon: 'el-icon-s-home',
+            icon: SwitchFilled,
             index: '/main',
             title: '系统首页',
             isBoss: true,
         },
         {
-            icon: 'el-icon-s-tools',
+            icon: Setting,
             index: '/webEdit',
             title: '网站设置',
             isBoss: true,
         },
         {
-            icon: 'el-icon-user-solid',
+            icon: User,
             index: '/userList',
             title: '用户管理',
             isBoss: true,
         },
         {
-            icon: 'el-icon-postcard',
+            icon: Postcard,
             index: '/postList',
             title: '文章管理',
             isBoss: false,
         },
         {
-            icon: 'el-icon-notebook-2',
+            icon: Notebook,
             index: '/sortList',
             title: '分类管理',
             isBoss: true,
         },
         {
-            icon: 'el-icon-edit-outline',
+            icon: Edit,
             index: '/commentList',
             title: '评论管理',
             isBoss: false,
         },
         {
-            icon: 'el-icon-s-comment',
+            icon: ChatLineRound,
             index: '/treeHoleList',
             title: '树洞管理',
             isBoss: true,
         },
         {
-            icon: 'el-icon-paperclip',
+            icon: Paperclip,
             index: '/resourceList',
             title: '资源管理',
             isBoss: false,
         },
         {
-            icon: 'el-icon-bank-card',
+            icon: CreditCard,
             index: '/resourcePathList',
             title: '资源聚合',
             isBoss: true,
         },
         {
-            icon: 'el-icon-sugar',
+            icon: Sugar,
             index: '/loveList',
             title: '表白墙',
             isBoss: true,
         },
-    ]
-})
+    ])
 
 const collapse = () => {
     if (data.isCollapse) {
@@ -129,11 +134,17 @@ const collapse = () => {
     data.isCollapse = !data.isCollapse
 }
 
-const { isBoss, isCollapse, items } = toRefs(data)
+const { isBoss, isCollapse } = toRefs(data)
 
 </script>
 
 <style scoped>
+:root {
+    --el-menu-bg-color: #ebf1f6;
+    --el-menu-item-text-color: #606266;
+    --el-menu-item-active-text-color: #20a0ff;
+}
+
 .sidebar {
     display: block;
     position: absolute;
@@ -156,4 +167,13 @@ const { isBoss, isCollapse, items } = toRefs(data)
 .sidebar-el-menu .el-menu-item {
     padding: 0 10px !important;
 }
+
+.el-menu-item [class^=el-icon] {
+    font-size: 18px;
+    margin-right: 10px;
+    text-align: center;
+    vertical-align: middle;
+    width: var(--el-menu-icon-width);
+}
+
 </style>

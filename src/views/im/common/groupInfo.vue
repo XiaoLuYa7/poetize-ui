@@ -184,7 +184,7 @@
                         !groups[currentGroupId].inType
                       )
                     "
-                    v-model:value="groups[currentGroupId].inType"
+                    v-model="groups[currentGroupId].inType"
                   />
                 </div>
               </div>

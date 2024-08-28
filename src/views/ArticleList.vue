@@ -204,11 +204,11 @@ const props = defineProps({
     height: 100%;
 }
 
-.recent-post-item-image>>>.el-image__inner {
+.recent-post-item-image :deep(.el-image__inner) {
     transition: all 1s;
 }
 
-.recent-post-item-image>>>.el-image__inner:hover {
+.recent-post-item-image :deep(.el-image__inner:hover) {
     transform: scale(1.2);
 }
 

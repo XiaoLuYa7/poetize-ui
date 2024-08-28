@@ -15,12 +15,12 @@
             </div>
             <el-form style="margin-top: 25px">
                 <div>
-                    <el-input v-model:value="account">
+                    <el-input v-model="account">
                         <template v-slot:prepend>账号</template>
                     </el-input>
                 </div>
                 <div style="margin-top: 25px">
-                    <el-input v-model:value="password" type="password">
+                    <el-input v-model="password" type="password">
                         <template v-slot:prepend>密码</template>
                     </el-input>
                 </div>
@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, toRefs } from 'vue';
+import { onMounted, reactive, toRefs, inject } from 'vue';
 import ProButton from '../../components/common/ProButton.vue'
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
@@ -117,6 +117,10 @@ const {redirect,account,password} = toRefs(data)
     padding: 30px 40px 5px;
     position: relative;
 }
+:deep(.el-input__inner ){
+    border: none !important;  /* 移除边框 */
+    box-shadow: none !important;  /* 移除阴影 */
+  }
 
 .verify-content>div:first-child {
     position: absolute;

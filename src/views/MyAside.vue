@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <a class="collection-btn" @click="showTip()">
-                    <i class="el-icon-star-off" style="margin-right: 2px"></i>朋友圈
+                    <el-icon style="margin-right: 2px"><Star /></el-icon>朋友圈
                 </a>
             </div>
 
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     <div class="aside-post-date">
-                        <i class="el-icon-date" style="color: var(--greyFont)"></i>{{ article.createTime }}
+                        <el-icon style="color: var(--greyFont)"><Calendar /></el-icon>{{ article.createTime }}
                     </div>
                 </div>
             </div>
@@ -134,7 +134,8 @@ import {vue3ScrollSeamless} from "vue3-scroll-seamless";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { computed, reactive, inject, defineEmits, toRefs, onMounted } from "vue";
+import { computed, reactive, inject, toRefs, onMounted } from "vue";
+import {Star,Calendar} from '@element-plus/icons-vue'
 
 // hooks
 const common = inject("$common");
@@ -276,6 +277,9 @@ const { pagination, recommendArticles, treeHoles, articleSearch, speedLevel } = 
     overflow: hidden;
     z-index: 1;
     margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .collection-btn::before {
@@ -358,6 +362,9 @@ const { pagination, recommendArticles, treeHoles, articleSearch, speedLevel } = 
     margin-bottom: 20px;
     color: var(--greyFont);
     font-size: 12px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .post-sort {

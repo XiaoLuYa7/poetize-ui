@@ -110,7 +110,7 @@
 import MyFooter from '../components/common/MyFooter.vue';
 import ProTag from '../components/common/ProTag.vue';
 import Photo from '../components/common/Photo.vue';
-import { inject, reactive, toRefs } from 'vue';
+import { inject, onMounted, reactive, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
@@ -136,11 +136,13 @@ const data = reactive({
     },
     photoTitleList: [],
     photoList: [],
-    webStaticResourcePrefix: import.meta.VITE_WEB_STATIC_RESOURCE_PREFIX,
+    webStaticResourcePrefix: import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX
 });
 
-getCollect();
-getPhotoTitles();
+onMounted(() => {
+    getCollect();
+    getPhotoTitles();
+})
 
 const toUrl = (url) => {
     window.open(url);

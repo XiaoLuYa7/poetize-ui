@@ -2,8 +2,9 @@
     <div>
         <div>
             <div class="handle-box">
-                <el-select v-show="isBoss" clearable v-model:value="pagination.resourceType" placeholder="资源类型"
-                    class="handle-select mrb10">
+                <span>资源类型：</span>
+                <el-select v-show="isBoss" clearable v-model="pagination.resourceType" popper-class="custom-popper" filterable placeholder="资源类型"
+                    class="handle-select" style="margin-right: 10px">
                     <el-option key="1" label="用户头像" value="userAvatar"></el-option>
                     <el-option key="2" label="文章封面" value="articleCover"></el-option>
                     <el-option key="3" label="文章图片" value="articlePicture"></el-option>
@@ -23,8 +24,8 @@
                     <el-option key="17" label="公共资源" value="assets"></el-option>
                     <el-option key="18" label="表情包" value="internetMeme"></el-option>
                 </el-select>
-                <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
-                <el-button type="primary" @click="addResources()">新增资源</el-button>
+                <el-button type="primary" :icon="Search" @click="search()" style="margin-left: 15px">搜索</el-button>
+                <el-button type="success" @click="addResources()">新增资源</el-button>
             </div>
             <el-table :data="resources" border class="table" header-cell-class-name="table-header">
                 <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
@@ -36,7 +37,7 @@
                         <el-tag :type="scope.row.status === false ? 'danger' : 'success'" disable-transitions>
                             {{ scope.row.status === false ? '禁用' : '启用' }}
                         </el-tag>
-                        <el-switch @click="changeStatus(scope.row)" v-model:value="scope.row.status"></el-switch>
+                        <el-switch @click="changeStatus(scope.row)" v-model="scope.row.status"></el-switch>
                     </template>
                 </el-table-column>
                 <el-table-column label="路径" align="center">
@@ -64,8 +65,7 @@
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template v-slot="scope">
-                        <el-button type="text" icon="el-icon-delete" style="color: var(--orangeRed)"
-                            @click="handleDelete(scope.row)">
+                        <el-button text :icon="Delete" type="warning" class="btn-p5" @click="handleDelete(scope.row)">
                             删除
                         </el-button>
                     </template>
@@ -78,12 +78,12 @@
             </div>
         </div>
 
-        <el-dialog title="文件" v-model:visible="resourceDialog" width="25%" :append-to-body="true"
+        <el-dialog title="文件" v-model="resourceDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <div style="display: flex; margin-bottom: 10px">
                     <div style="line-height: 40px">存储平台：</div>
-                    <el-select v-model:value="storeType" placeholder="存储平台" style="width: 120px">
+                    <el-select v-model="storeType" placeholder="存储平台" style="width: 120px">
                         <el-option v-for="(item, i) in storeTypes" :key="i" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
@@ -101,6 +101,8 @@ import { reactive, inject, toRefs } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Delete, Search } from '@element-plus/icons-vue';
+import UploadPicture from "../../components/common/UploadPicture.vue";
 
 // hooks
 const common = inject("$common");
@@ -230,9 +232,14 @@ getResources();
 const { pagination, resources, resourceDialog, storeTypes, storeType, isBoss } = toRefs(data);
 
 </script>
+
 <style scoped>
 .handle-box {
     margin-bottom: 20px;
+}
+
+.handle-box > span {
+    font-size: 15px;
 }
 
 .handle-select {
