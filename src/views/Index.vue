@@ -112,7 +112,7 @@
             </template>
         </Loader>
 
-        <el-dialog title="每日推荐" v-model="pushDialogVisible" width="40%" :append-to-body="true"
+        <el-dialog draggabletitle="每日推荐" v-model="pushDialogVisible" width="40%" :append-to-body="true"
             :close-on-click-modal="false" class="index-push" center top="25vh">
             <div style="display: flex; align-items: center; flex-direction: column">
                 <div class="push-title">

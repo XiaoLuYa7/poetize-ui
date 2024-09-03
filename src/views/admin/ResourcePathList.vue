@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <el-dialog title="图片" v-model="coverDialog" width="25%" :append-to-body="true"
+        <el-dialog draggable title="图片" v-model="coverDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <UploadPicture :isAdmin="true" :prefix="resourcePath.type + 'Cover'" @addPicture="addPicture"
@@ -65,7 +65,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="文件" v-model="uploadDialog" width="25%" :append-to-body="true"
+        <el-dialog draggable title="文件" v-model="uploadDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <UploadPicture :isAdmin="true" :prefix="resourcePath.type + 'Url'" @addPicture="addFile" :maxSize="10"
@@ -73,7 +73,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="资源聚合" v-model="addResourcePathDialog" width="40%" :before-close="clearDialog"
+        <el-dialog draggable title="资源聚合" v-model="addResourcePathDialog" width="40%" :before-close="clearDialog"
             :append-to-body="true" :close-on-click-modal="false" center top="25vh">
             <div>
                 <div>

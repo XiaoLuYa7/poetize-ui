@@ -4,14 +4,25 @@ export default {
   imBaseURL: import.meta.env.VITE_IM_BASE_URL,
   webURL: import.meta.env.VITE_WEB_URL,
 
+
+  imIP: import.meta.env.VITE_IM_IP,
+  wsProtocol: import.meta.env.VITE_WS_PROTOCOL,
+  wsPort: import.meta.env.VITE_WS_PORT,
+
   host: import.meta.env.VITE_HOST,
 
   live2d_path: "https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/",
   cdnPath: "https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/",
   hitokoto: "https://v1.hitokoto.cn",
-  shehui: "https://api.oick.cn/yulu/api.php",
+
   tocbot: "https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.18.2/tocbot.min.js",
   jinrishici: "https://v1.jinrishici.com/all.json",
+
+  jitang: "https://api.oick.cn/dutang/api.php",
+  shehui: "https://api.oick.cn/yulu/api.php",
+  yiyan: "https://api.oick.cn/yiyan/api.php",
+  dog: "https://api.oick.cn/dog/api.php",
+
   //前后端定义的密钥，AES使用16位
   cryptojs_key: "luckluckluckluck",
 

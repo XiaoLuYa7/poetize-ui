@@ -8,30 +8,23 @@
                 }">
                     <el-avatar shape="square" class="avatar-img" :size="36" :src="treeHole.avatar"></el-avatar>
                     <div class="tree-hole-box" :style="{
-                        background:
-                            constant.tree_hole_color[
-                            index % constant.tree_hole_color.length
-                            ],
+                        background:constant.tree_hole_color[index % constant.tree_hole_color.length],
+                        width: showName ? '350px' : '300px'
                     }">
                         <div class="box-tag" v-if="index % 2 === 0 && !common.mobile()" :style="{
                             'border-color':
-                                'transparent transparent transparent ' +
-                                constant.tree_hole_color[
-                                index % constant.tree_hole_color.length
-                                ],
+                                'transparent transparent transparent ' +constant.tree_hole_color[index % constant.tree_hole_color.length],
                         }"></div>
                         <div class="box-tag" v-if="index % 2 !== 0 || common.mobile()" :style="{
                             'border-color':
-                                'transparent ' +
-                                constant.tree_hole_color[
-                                index % constant.tree_hole_color.length
-                                ] +
+                                'transparent ' +constant.tree_hole_color[index % constant.tree_hole_color.length] +
                                 ' transparent transparent',
                         }"></div>
                         <div class="my-content" v-html="treeHole.content"></div>
                         <div style="display: flex; justify-content: space-between">
                             <div class="myCenter">
-                                {{ treeHole.username }} 😃 {{ treeHole.createTime }}
+                               <div v-show="showName"> {{ treeHole.username }}</div>
+                                😃 {{ treeHole.createTime }}
                             </div>
                             <div class="myCenter">
                                 <el-tooltip effect="dark" content="真的要删除嘛！" placement="top">
@@ -55,7 +48,7 @@
                 </div>
             </li>
         </ol>
-        <div class="tree-hole-go">
+        <div class="tree-hole-go" v-show="showPlane">
             <i class="fa fa-paper-plane" @click="launch()"></i>
         </div>
     </div>
@@ -64,7 +57,7 @@
 <script setup>
 
 import { ElMessage } from 'element-plus'
-import { inject } from 'vue';
+import { inject, onMounted } from 'vue';
 import { useStore } from 'vuex'
 
 const http = inject("$http")
@@ -79,6 +72,14 @@ const props = defineProps({
     },
     avatar: {
         type: String,
+    },
+    showName: {
+        type: Boolean,
+        default: false
+    },
+    showPlane: {
+        type: Boolean,
+        default: false
     }
 })
 
@@ -191,7 +192,6 @@ const deleteTreeHole = (id) => {
 .tree-hole-box {
     font-size: 16px;
     padding: 10px;
-    width: 400px;
     border-radius: 5px;
     position: relative;
     letter-spacing: 0.1em;

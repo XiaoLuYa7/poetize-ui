@@ -9,8 +9,7 @@
             <div id="treeHole">
                 <TreeHole :treeHoleList="treeHoleList" style="min-height: 70vh" :avatar="!common.isEmpty(store.state.currentUser)
                     ? store.state.currentUser.avatar
-                    : store.state.webInfo.avatar
-                    " @launch="launch" @deleteTreeHole="deleteTreeHole">
+                    : store.state.webInfo.avatar" :showName="true" :showPlane="true" @launch="launch"  @deleteTreeHole="deleteTreeHole">
                 </TreeHole>
                 <div class="myCenter proPage" v-if="pagination.size < pagination.total"
                     style="margin: 10px 0px 30px 0px">
@@ -24,7 +23,7 @@
             <MyFooter :showFooter="showFooter"></MyFooter>
         </div>
 
-        <el-dialog title="朋友圈" v-model="weiYanDialogVisible" width="40%" :before-close="handleClose"
+        <el-dialog draggable title="朋友圈" v-model="weiYanDialogVisible" width="40%" :before-close="handleClose"
             :append-to-body="true" destroy-on-close :close-on-click-modal="false" center top="25vh">
             <div>
                 <div class="myCenter" style="padding-bottom: 20px; position: relative">

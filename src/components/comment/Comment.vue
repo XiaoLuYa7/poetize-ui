@@ -140,7 +140,7 @@
             <i>来发第一个留言啦~</i>
         </div>
 
-        <el-dialog title="留言" v-model="replyDialogVisible" width="40%" :before-close="handleClose"
+        <el-dialog draggable title="留言" v-model="replyDialogVisible" width="40%" :before-close="handleClose"
             :append-to-body="true" :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <CommentBox @submitComment="submitReply"></CommentBox>

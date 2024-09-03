@@ -1,6 +1,6 @@
 <template>
     <!-- 登陆和注册 -->
-    <div class="myCenter in-up-container my-animation-hideToShow">
+    <div class="myCenter in-up-container my-animation-hideToShow"  @keyup.enter="loginOrRegister()">
         <!-- 背景图片 -->
         <el-image class="my-el-image" style="position: absolute" v-once lazy :src="store.state.webInfo.randomCover[
             Math.floor(Math.random() * store.state.webInfo.randomCover.length)
@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <el-dialog title="找回密码" v-model="showDialog" width="30%" :before-close="clearDialog" :append-to-body="true"
+    <el-dialog draggable title="找回密码" v-model="showDialog" width="30%" :before-close="clearDialog" :append-to-body="true"
         :close-on-click-modal="false" center top="25vh">
         <div class="myCenter" style="flex-direction: column">
             <el-form>
@@ -88,6 +88,7 @@ import { reactive, inject, toRefs } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { da } from 'element-plus/es/locales.mjs';
 
 //hooks
 const common = inject("$common");
@@ -106,12 +107,23 @@ const data = reactive({
     codeString: '获取验证码',
     intervalCode: null,
     newPasswd: '',
-    confirmPasswd: ''
+    confirmPasswd: '',
+    flag: 'login'
 });
+
+const loginOrRegister = () => {
+    if(data.flag === 'login'){
+        login();
+    }
+    if(data.flag === 'regist'){
+        regist();
+    }
+};
 
 
 
 const signUp = () => {
+    data.flag = 'regist';
     data.username = '';
     data.password = '';
     data.email = '';
@@ -119,6 +131,7 @@ const signUp = () => {
     document.querySelector('#loginAndRegist').classList.add('right-panel-active');
 };
 const signIn = () => {
+    data.flag = 'login';
     data.username = '';
     data.password = '';
     document.querySelector('#loginAndRegist').classList.remove('right-panel-active');

@@ -561,6 +561,15 @@ button {
     user-select: none;
 }
 
+/* 滚动条 */
+.group-card ::-webkit-scrollbar {
+
+}
+
+.image-list::-webkit-scrollbar {
+    display: none;
+}
+
 /*黑色边框*/
 .el-tooltip__trigger:focus-visible {
     outline: unset;

@@ -73,7 +73,7 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <el-dialog title="修改用户类型" v-model="editVisible" width="30%" :before-close="handleClose" :append-to-body="true"
+        <el-dialog draggable title="修改用户类型" v-model="editVisible" width="30%" :before-close="handleClose" :append-to-body="true"
             destroy-on-close center top="25vh">
             <div class="myCenter">
                 <el-radio-group v-model="changeUser.userType">

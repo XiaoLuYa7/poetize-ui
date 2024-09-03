@@ -176,7 +176,7 @@
             <i class="fa fa-align-justify" aria-hidden="true"></i>
         </div>
 
-        <el-dialog title="版权声明" v-model="copyrightDialogVisible" width="80%" :append-to-body="true"
+        <el-dialog draggable title="版权声明" v-model="copyrightDialogVisible" width="80%" :append-to-body="true"
             class="article-copy" center top="25vh">
             <div style="display: flex; align-items: center; flex-direction: column">
                 <el-avatar shape="square" :size="35" :src="store.state.webInfo.avatar"></el-avatar>
@@ -243,7 +243,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="最新进展" v-model="weiYanDialogVisible" width="40%" :append-to-body="true"
+        <el-dialog draggable title="最新进展" v-model="weiYanDialogVisible" width="40%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <div class="myCenter" style="margin-bottom: 20px">
@@ -256,7 +256,7 @@
         </el-dialog>
 
         <!-- 微信 -->
-        <el-dialog title="密码" :modal="false" v-model="showPasswordDialog" width="25%" :append-to-body="true"
+        <el-dialog draggable title="密码" :modal="false" v-model="showPasswordDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <div>

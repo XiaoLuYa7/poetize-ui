@@ -22,6 +22,9 @@
     /* 主题悬停背景 */
     --gradualRed: linear-gradient(to right, #ff4b2b, #ff416c);
 
+    /* 水波纹 */
+    --rippleColor: rgba(0, 0, 0, 0.5);
+
     /* 导航栏字体 */
     --toolbarFont: #333333;
     /* 导航栏背景 */
@@ -50,6 +53,8 @@
     --maxMask: rgba(0, 0, 0, 0.7);
 
     --white: white;
+    --maxWhite: #fcfcfc;
+    --midWhite: #f3f3f3;
 
     --red: red;
     --lightRed: #ff4b2b;
@@ -58,7 +63,9 @@
 
     --azure: #ecf7fe;
     --blue: rgb(3, 169, 244);
+    --messageColor: #cfe7ff;
 
+    --lowGray: #cacacb;
     --lightGray: #dddddd;
     --maxLightGray: #eeeeee;
     --maxMaxLightGray: rgba(242, 242, 242, 0.5);

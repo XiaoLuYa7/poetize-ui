@@ -411,13 +411,7 @@ const goIm = () => {
         });
     } else {
         let userToken = common.encrypt(localStorage.getItem("userToken"));
-        window.open(
-            constant.imBaseURL +
-            "?userToken=" +
-            userToken +
-            "&defaultStoreType=" +
-            localStorage.getItem("defaultStoreType")
-        );
+        window.open(constant.webURL + "/im");
     }
 };
 

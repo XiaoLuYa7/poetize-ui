@@ -22,7 +22,7 @@
         <!-- 表情 -->
         <Emoji @addEmoji="addEmoji" :showEmoji="showEmoji"></Emoji>
 
-        <el-dialog title="图片" v-model="showPicture" width="25%" :append-to-body="true"
+        <el-dialog draggable title="图片" v-model="showPicture" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <UploadPicture :prefix="'commentPicture'" @addPicture="addPicture" :maxSize="2" :maxNumber="1">

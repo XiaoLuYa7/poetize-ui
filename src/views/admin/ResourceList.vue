@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <el-dialog title="文件" v-model="resourceDialog" width="25%" :append-to-body="true"
+        <el-dialog draggable title="文件" v-model="resourceDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <div style="display: flex; margin-bottom: 10px">

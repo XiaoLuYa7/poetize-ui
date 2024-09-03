@@ -155,7 +155,7 @@
                 <div class="card-container">
                     <div id="treeHole" v-show="card === 1">
                         <TreeHole :treeHoleList="treeHoleList" :avatar="store.state.webInfo.avatar"
-                            @deleteTreeHole="deleteTreeHole" @launch="launch">
+                            @deleteTreeHole="deleteTreeHole" :showName="true" :showPlane="true" @launch="launch">
                         </TreeHole>
                         <div class="myCenter proPage" v-if="weiYanPagination.size < weiYanPagination.total"
                             style="margin: 10px 0px 30px 0px">
@@ -203,7 +203,7 @@
                 </div>
             </div>
 
-            <el-dialog title="表白" v-model="loveDialogVisible" width="50%" :close-on-click-modal="false"
+            <el-dialog draggable title="表白" v-model="loveDialogVisible" width="50%" :close-on-click-modal="false"
                 :append-to-body="true" @opened="initVditor()" destroy-on-close center top="5vh">
                 <div>
                     <div class="form-main">
@@ -314,7 +314,7 @@
                 </div>
             </el-dialog>
 
-            <el-dialog title="图片" v-model="addPictureDialog" width="25%" :append-to-body="true"
+            <el-dialog draggable title="图片" v-model="addPictureDialog" width="25%" :append-to-body="true"
                 :close-on-click-modal="false" destroy-on-close center top="25vh">
                 <div>
                     <uploadPicture :prefix="'love/' + pictureType" @addPicture="addPicture" :maxSize="2" :maxNumber="1">
@@ -322,7 +322,7 @@
                 </div>
             </el-dialog>
 
-            <el-dialog title="点点滴滴" v-model="weiYanDialogVisible" width="40%" :before-close="handleClose"
+            <el-dialog draggabletitle="点点滴滴" v-model="weiYanDialogVisible" width="40%" :before-close="handleClose"
                 :append-to-body="true" destroy-on-close :close-on-click-modal="false" center top="25vh">
                 <div>
                     <div class="myCenter" style="padding-bottom: 20px; position: relative">

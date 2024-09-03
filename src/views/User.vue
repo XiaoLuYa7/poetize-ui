@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <el-dialog :title="dialogTitle" v-model="showDialog" width="30%" :before-close="clearDialog"
+        <el-dialog draggable :title="dialogTitle" v-model="showDialog" width="30%" :before-close="clearDialog"
             :append-to-body="true" :close-on-click-modal="false" center top="25vh">
             <div class="myCenter" style="flex-direction: column">
                 <el-form>
@@ -99,7 +99,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="图片" v-model="addPictureDialog" width="25%" :append-to-body="true"
+        <el-dialog draggable title="图片" v-model="addPictureDialog" width="25%" :append-to-body="true"
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <UploadPicture :prefix="'userAvatar'" @addPicture="addPicture" :maxSize="2" :maxNumber="1">

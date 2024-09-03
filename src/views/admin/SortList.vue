@@ -54,7 +54,7 @@
             </el-table-column>
         </el-table>
 
-        <el-dialog title="分类" v-model="sortDialog" width="30%" :before-close="handleClose"
+        <el-dialog draggable title="分类" v-model="sortDialog" width="30%" :before-close="handleClose"
             :append-to-body="true" destroy-on-close center top="25vh">
             <div class="my-dialog">
                 <div class="myCenter">
@@ -82,7 +82,7 @@
             </template>
         </el-dialog>
 
-        <el-dialog title="标签" v-model="labelDialog" width="30%" :before-close="handleClose"
+        <el-dialog draggable title="标签" v-model="labelDialog" width="30%" :before-close="handleClose"
             :append-to-body="true" destroy-on-close center top="25vh">
             <div class="my-dialog">
                 <el-input placeholder="请输入标签名称" v-model="labelForHttp.labelName">

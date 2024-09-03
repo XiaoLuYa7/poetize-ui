@@ -4,7 +4,7 @@
             <div v-show="showEmoji">
                 <span class="emoji-item" v-for="(value, key, index) in emojiListURL" :key="index"
                     @click="addEmoji(key)">
-                    <img loading="lazy" class="emoji" :src="value" :title="key" width="24px" height="24px" />
+                    <img loading="lazy" class="emoji" :src="value" :title="key" width="28px" height="28px" />
                 </span>
             </div>
         </transition>
@@ -48,7 +48,7 @@ const getEmojiList = (emojiList) => {
     emojiList.forEach((emoji, index) => {
         const emojiName = `[${emoji}]`
         const url =
-            import.meta.env.VITE_APP_WEB_STATIC_RESOURCE_PREFIX +
+            import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX +
             `assets/emoji/q${index + 1}.gif`
         result[emojiName] = url
     })
