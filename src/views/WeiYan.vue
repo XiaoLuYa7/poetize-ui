@@ -63,9 +63,7 @@ const data = reactive({
         size: 12,
         total: 0,
         classify: 'friend',
-        userId: common.isEmpty(store.state.currentUser)
-            ? 1
-            : store.state.currentUser.id,
+        userId: common.isEmpty(store.state.currentUser) ? '' : store.state.currentUser.id,
     },
     weiYanDialogVisible: false,
     isPublic: true,
@@ -107,8 +105,7 @@ const submitWeiYan = (content) => {
     let weiYan = {
         content: content,
         isPublic: data.isPublic,
-        type: 'friend',
-        userId: store.state.currentUser.id,
+        type: 'friend'
     };
 
     http.post(constant.baseURL + '/weiYan/saveWeiYan', weiYan)

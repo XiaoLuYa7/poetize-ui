@@ -6,9 +6,6 @@ export default function () {
     this.ws_protocol = constant.wsProtocol;
     this.ip = constant.imIP;
     this.port = constant.wsPort;
-    console.log(constant.wsProtocol)
-    console.log(constant.imIP)
-    console.log(constant.wsPort)
     this.paramStr = 'Authorization=' + localStorage.getItem("userToken");
     this.binaryType = 'blob';
 

@@ -223,8 +223,6 @@ const regist = () => {
         return;
     }
 
-    console.log(typeof data.code)
-
     if (common.isEmpty(data.code)) {
         ElMessage({
             message: '请输入验证码！',
@@ -400,7 +398,6 @@ const validatePassword = (password) => {
     return '密码有效';
 };
 const validateUsername = (username) => {
-    console.log(username)
     if (username.length < 3 || username.length > 15) {
         return { isValid: false, message: '用户名长度必须在3到15个字符之间！' };
     }

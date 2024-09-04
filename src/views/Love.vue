@@ -111,7 +111,6 @@
                                 fill="#EA0606"></path>
                         </svg>
                     </span>
-                    <span class="family-button-love" @click="addFamily()">表白</span>
                 </div>
             </div>
 
@@ -154,14 +153,23 @@
 
                 <div class="card-container">
                     <div id="treeHole" v-show="card === 1">
-                        <TreeHole :treeHoleList="treeHoleList" :avatar="store.state.webInfo.avatar"
-                            @deleteTreeHole="deleteTreeHole" :showName="true" :showPlane="true" @launch="launch">
-                        </TreeHole>
-                        <div class="myCenter proPage" v-if="weiYanPagination.size < weiYanPagination.total"
-                            style="margin: 10px 0px 30px 0px">
-                            <el-pagination background layout="prev, pager, next" :total="weiYanPagination.total"
-                                :page-size="weiYanPagination.size" :pager-count="5" @current-change="handlePageChange">
-                            </el-pagination>
+                        <div v-if="!common.isEmpty(store.state.currentUser) && store.state.currentUser.isBoss">
+                            <TreeHole :treeHoleList="treeHoleList" :avatar="store.state.webInfo.avatar"
+                                @deleteTreeHole="deleteTreeHole" :showName="true" :showPlane="true" @launch="launch">
+                            </TreeHole>
+                            <div class="myCenter proPage" v-if="weiYanPagination.size < weiYanPagination.total"
+                                style="margin: 10px 0px 30px 0px">
+                                <el-pagination background layout="prev, pager, next" :total="weiYanPagination.total"
+                                    :page-size="weiYanPagination.size" :pager-count="5"
+                                    @current-change="handlePageChange">
+                                </el-pagination>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <TreeHole :treeHoleList="treeHoleList" :avatar="store.state.webInfo.avatar"
+                                @deleteTreeHole="deleteTreeHole" :showName="true" :showPlane="true"
+                                @launch="pageWeiYan">
+                            </TreeHole>
                         </div>
                     </div>
                     <div v-show="card === 2">
@@ -203,125 +211,6 @@
                 </div>
             </div>
 
-            <el-dialog draggable title="表白" v-model="loveDialogVisible" width="50%" :close-on-click-modal="false"
-                :append-to-body="true" @opened="initVditor()" destroy-on-close center top="5vh">
-                <div>
-                    <div class="form-main">
-                        <img :src="webStaticResourcePrefix + 'assets/image/friendLetterMiddle.jpg'
-                            " style="width: 100%" />
-                        <div>
-                            <div>
-                                <div class="myCenter form-friend">
-                                    <div class="user-content">
-                                        <div>
-                                            <div class="form-title">背景封面</div>
-                                            <div style="display: flex">
-                                                <el-input maxlength="120" v-model="userLove.bgCover"></el-input>
-                                                <div style="margin: 3px 0 0 10px">
-                                                    <proButton :info="'上传背景'" @click="openPicture('bgCover')"
-                                                        :before="constant.before_color_1"
-                                                        :after="constant.after_color_1">
-                                                    </proButton>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="form-title">男生头像</div>
-                                            <div style="display: flex">
-                                                <el-input maxlength="120" v-model="userLove.manCover"></el-input>
-                                                <div style="margin: 3px 0 0 10px">
-                                                    <proButton :info="'上传头像'" @click="openPicture('manCover')"
-                                                        :before="constant.before_color_1"
-                                                        :after="constant.after_color_1">
-                                                    </proButton>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="form-title">女生头像</div>
-                                            <div style="display: flex">
-                                                <el-input maxlength="120"
-                                                    v-model="userLove.womanCover"></el-input>
-                                                <div style="margin: 3px 0 0 10px">
-                                                    <proButton :info="'上传头像'" @click="openPicture('womanCover')"
-                                                        :before="constant.before_color_1"
-                                                        :after="constant.after_color_1">
-                                                    </proButton>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="form-title">男生昵称</div>
-                                            <div>
-                                                <el-input maxlength="10" v-model="userLove.manName"></el-input>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="form-title">女生昵称</div>
-                                            <div>
-                                                <el-input maxlength="10" v-model="userLove.womanName"></el-input>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="form-title">计时时间</div>
-                                            <div>
-                                                <el-date-picker v-model="userLove.timing"
-                                                    value-format="yyyy-MM-dd HH:mm:ss" type="datetime" align="center"
-                                                    placeholder="选择计时时间">
-                                                </el-date-picker>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="form-title">倒计时标题</div>
-                                            <div>
-                                                <el-input maxlength="20"
-                                                    v-model="userLove.countdownTitle"></el-input>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="form-title">倒计时时间</div>
-                                            <div>
-                                                <el-date-picker v-model="userLove.countdownTime"
-                                                    value-format="yyyy-MM-dd HH:mm:ss" type="datetime" align="center"
-                                                    placeholder="选择倒计时时间">
-                                                </el-date-picker>
-                                            </div>
-                                        </div>
-                                        <div style="height: 260px">
-                                            <div class="form-title">
-                                                告白信
-                                            </div>
-                                            <div id="vditor" class="my-vditor"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="myCenter" style="margin-top: 20px">
-                                    <proButton :info="'提交'" @click.stop="submitLove()" :before="constant.before_color_2"
-                                        :after="constant.after_color_2">
-                                    </proButton>
-                                </div>
-                            </div>
-                            <div>
-                                <img :src="webStaticResourcePrefix +
-                                    'assets/image/friendLetterBiLi.png'
-                                    " style="width: 100%; margin: 5px auto" />
-                            </div>
-                            <p style="font-size: 12px; text-align: center; color: #999">
-                                欢迎入住表白墙
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </el-dialog>
-
-            <el-dialog draggable title="图片" v-model="addPictureDialog" width="25%" :append-to-body="true"
-                :close-on-click-modal="false" destroy-on-close center top="25vh">
-                <div>
-                    <uploadPicture :prefix="'love/' + pictureType" @addPicture="addPicture" :maxSize="2" :maxNumber="1">
-                    </uploadPicture>
-                </div>
-            </el-dialog>
-
             <el-dialog draggabletitle="点点滴滴" v-model="weiYanDialogVisible" width="40%" :before-close="handleClose"
                 :append-to-body="true" destroy-on-close :close-on-click-modal="false" center top="25vh">
                 <div>
@@ -334,7 +223,6 @@
                     <commentBox @submitComment="submitWeiYan"></commentBox>
                 </div>
             </el-dialog>
-
 
             <div>
                 <!-- 页脚 -->
@@ -351,11 +239,7 @@ import CommentBox from '../components/comment/CommentBox.vue'
 import MyFooter from '../components/common/MyFooter.vue'
 import Photo from '../components/common/Photo.vue'
 import ProTag from '../components/common/ProTag.vue'
-import ProButton from '../components/common/ProButton.vue'
-import UploadPicture from '../components/common/UploadPicture.vue'
-import Vditor from 'vditor'
 import 'vditor/dist/index.css'
-import emojis from './../utils/emoji.json'
 import { onMounted, reactive, toRefs, inject, nextTick } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
@@ -370,23 +254,8 @@ const store = useStore();
 const router = useRouter();
 
 const data = reactive({
-    userLove: {
-        bgCover: '',
-        manCover: '',
-        womanCover: '',
-        manName: '',
-        womanName: '',
-        countdownTitle: '',
-        countdownTime: '',
-        timing: '',
-        familyInfo: '',
-    },
-    loveDialogVisible: false,
     weiYanDialogVisible: false,
     isPublic: true,
-    addPictureDialog: false,
-    pictureType: '',
-    adminLove: {},
     love: {
         bgCover: '',
         manCover: '',
@@ -425,22 +294,16 @@ const data = reactive({
         minute: 0,
         second: 0,
     },
-    webStaticResourcePrefix: import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX,
-    vditor: null
+    webStaticResourcePrefix: import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX
 })
 
 
 
-onMounted(async () => {
+onMounted(() => {
 
     // 加载family信息
-    await getAdminFamily()
+    getFamily();
     getPhotoTitles()
-
-    let currentUser = store.state.currentUser
-    if (!common.isEmpty(currentUser)) {
-        getFamily()
-    }
 })
 
 const handlePageChange = async (currentPage) => {
@@ -459,12 +322,15 @@ const submitWeiYan = (content) => {
     let weiYan = {
         content: content,
         isPublic: data.isPublic,
-        type: 'love',
-        userId: data.love.userId,
+        type: 'love'
     }
 
     http.post(constant.baseURL + '/weiYan/saveWeiYan', weiYan)
         .then((res) => {
+            ElMessage({
+                message: '发送成功！',
+                type: 'success',
+            })
             getWeiYan()
         })
         .catch((error) => {
@@ -475,12 +341,15 @@ const submitWeiYan = (content) => {
         })
     handleClose()
 }
+
+// 获取admin family信息
 const getFamily = () => {
     http.get(constant.baseURL + '/family/getFamily')
         .then((res) => {
             if (!common.isEmpty(res.data)) {
                 data.love = res.data
-                data.userLove = res.data
+                getLove();
+                countdown();
             }
         })
         .catch((error) => {
@@ -490,126 +359,11 @@ const getFamily = () => {
             })
         })
 }
-// 打开上传弹窗
-const openPicture = (type) => {
-    data.pictureType = type
-    data.addPictureDialog = true
-}
-// 上传文件
-const addPicture = (res) => {
-    if (data.pictureType === 'bgCover') {
-        data.userLove.bgCover = res
-    } else if (data.pictureType === 'manCover') {
-        data.userLove.manCover = res
-    } else if (data.pictureType === 'womanCover') {
-        data.userLove.womanCover = res
-    }
 
-    data.pictureType = ''
-    data.addPictureDialog = false
-}
-// 提交表白单
-const submitLove = () => {
-    if (data.userLove.bgCover.trim() === '') {
-        ElMessage({
-            message: '你还没设置背景封面呢~',
-            type: 'warning',
-        })
-        return
-    }
-
-    if (data.userLove.manCover.trim() === '') {
-        ElMessage({
-            message: '你还没设置男生头像呢~',
-            type: 'warning',
-        })
-        return
-    }
-
-    if (data.userLove.womanCover.trim() === '') {
-        ElMessage({
-            message: '你还没设置女生头像呢~',
-            type: 'warning',
-        })
-        return
-    }
-
-    if (data.userLove.manName.trim() === '') {
-        ElMessage({
-            message: '你还没写男生昵称呢~',
-            type: 'warning',
-        })
-        return
-    }
-
-    if (data.userLove.womanName.trim() === '') {
-        ElMessage({
-            message: '你还没写女生昵称呢~',
-            type: 'warning',
-        })
-        return
-    }
-
-    if (data.userLove.timing.trim() === '') {
-        ElMessage({
-            message: '你还没设置计时时间呢~',
-            type: 'warning',
-        })
-        return
-    }
-    data.userLove.familyInfo = data.vditor.getValue()
-    if (data.userLove.familyInfo.trim() === '') {
-        ElMessage({
-            message: '你还没写表白信呢~',
-            type: 'warning',
-        })
-        return
-    }
-
-    http.post(constant.baseURL + '/family/saveFamily', data.userLove)
-        .then((res) => {
-            ElMessage({
-                type: 'success',
-                message: '提交成功，待管理员审核！',
-            })
-            data.userLove = {}
-            data.loveDialogVisible = false
-        })
-        .catch((error) => {
-            ElMessage({
-                message: error.message,
-                type: 'error',
-            })
-        })
-}
-// 新增表白单
-const addFamily = () => {
-    if (common.isEmpty(store.state.currentUser)) {
-        ElMessage({
-            message: '请先登录！',
-            type: 'error'
-        })
-        return
-    }
-    // 如果当前用户有表白单，就回显表单
-    http.get(constant.baseURL + '/family/getFamily')
-        .then((res) => {
-            if (!common.isEmpty(res.data)) {
-                data.userLove = res.data
-            }
-        })
-        .catch((error) => {
-            ElMessage({
-                message: error.message,
-                type: 'error',
-            })
-        })
-
-    data.loveDialogVisible = true
-}
 const gotoLetter = () => {
     router.push({ path: '/letter' })
 }
+
 // 头像分类
 const getPhotoTitles = () => {
     http.get(constant.baseURL + '/webInfo/listAdminLovePhoto')
@@ -634,25 +388,7 @@ const getPhotoTitles = () => {
             })
         })
 }
-// 获取admin的表白单
-const getAdminFamily = async () => {
-    await http.get(constant.baseURL + '/family/getAdminFamily')
-        .then((res) => {
-            if (!common.isEmpty(res.data)) {
-                // 将表白信息设置为admin的
-                data.love = res.data
-                data.adminLove = res.data
-                countdown()
-                getLove()
-            }
-        })
-        .catch((error) => {
-            ElMessage({
-                message: error.message,
-                type: 'error',
-            })
-        })
-}
+
 // 切换图片分类
 const changePhotoTitle = (classify) => {
     if (classify !== data.photoPagination.classify) {
@@ -704,31 +440,7 @@ const changePhoto = () => {
             })
         })
 }
-const getWeiYan = () => {
-    data.weiYanPagination.userId = data.love.userId;
-    http.post(constant.baseURL + '/weiYan/listWeiYan', data.weiYanPagination)
-        .then((res) => {
-            if (!common.isEmpty(res.data)) {
-                res.data.records.forEach(c => {
-                    c.content = c.content.replace(/\n{2,}/g, '<div style="height: 12px"></div>');
-                    c.content = c.content.replace(/\n/g, '<br/>');
-                    c.content = common.faceReg(c.content);
-                    c.content = common.pictureReg(c.content);
-                });
-                data.treeHoleList = res.data.records
-                data.weiYanPagination.total = res.data.total
-            }
-            nextTick(() => {
-                common.imgShow("#treeHole .pictureReg");
-            });
-        })
-        .catch((error) => {
-            ElMessage({
-                message: error.message,
-                type: 'error',
-            })
-        })
-}
+
 // 计时器
 const countdown = () => {
     if (common.isEmpty(data.love.countdownTime)) {
@@ -757,8 +469,8 @@ const changeCard = (card) => {
     }
 }
 
-
 // 随笔加载下一页
+// 站长新增随笔
 const launch = () => {
     if (common.isEmpty(store.state.currentUser)) {
         ElMessage({
@@ -767,16 +479,60 @@ const launch = () => {
         });
         return;
     }
-    if (data.love.userId !== store.state.currentUser.id) {
+    if (!store.state.currentUser.isBoss) {
         ElMessage({
             message: "没有权限！",
             type: "error"
         });
         return;
     }
-    console.log(123)
     data.weiYanDialogVisible = true;
 }
+
+// 用户加载随笔
+const pageWeiYan = () => {
+    data.weiYanPagination.current = data.weiYanPagination.current + 1;
+    getWeiYan();
+}
+
+const getWeiYan = () => {
+    data.weiYanPagination.userId = data.love.userId;
+    http.post(constant.baseURL + '/weiYan/listWeiYan', data.weiYanPagination)
+        .then((res) => {
+            if (!common.isEmpty(res.data)) {
+                res.data.records.forEach(c => {
+                    c.content = c.content.replace(/\n{2,}/g, '<div style="height: 12px"></div>');
+                    c.content = c.content.replace(/\n/g, '<br/>');
+                    c.content = common.faceReg(c.content);
+                    c.content = common.pictureReg(c.content);
+                });
+                // 判断是否是站长
+                if (!common.isEmpty(store.state.currentUser) && store.state.currentUser.isBoss) {
+                    data.treeHoleList = res.data.records
+                } else {
+                    if (common.isEmpty(res.data.records)) {
+                        ElMessage({
+                            message: '到底啦~~',
+                            type: 'warning',
+                        })
+                    }
+                    data.treeHoleList = data.treeHoleList.concat(res.data.records);
+                }
+                data.weiYanPagination.total = res.data.total
+            }
+            nextTick(() => {
+                common.imgShow("#treeHole .pictureReg");
+            });
+        })
+        .catch((error) => {
+            ElMessage({
+                message: error.message,
+                type: 'error',
+            })
+        })
+}
+
+
 // 根据id删除随笔
 const deleteTreeHole = (id) => {
     if (common.isEmpty(store.state.currentUser)) {
@@ -816,47 +572,9 @@ const deleteTreeHole = (id) => {
         });
     });
 }
-const initVditor = () => {
-    data.vditor = new Vditor('vditor', {
-        height: 250,
-        value: data.userLove.familyInfo,
-        toolbarConfig: {
-            pin: true,
-        },
-        toolbar: [],
-        mode: 'ir', // split view
-        placeholder: '支持MarkDown哦...',
-        resize: {
-            enable: false,
-        },
-        upload: {
-            url: constant.baseURL + "/resource/upload",
-            linkToImgUrl: constant.baseURL + "/resource/upload",
-            handler: (files) => {
-                ElMessage({
-                    message: "表白信中不能上传图片哦！",
-                    type: "error"
-                });
-                return;
-            },
-        },
-        preview: {
-            markdown: {
-                codeBlockPreview: false
-            }
-        },
-        cache: {
-            enable: false,
-        },
-        hint: {
-            emoji: emojis
-        },
-    })
-}
 
-const { userLove, loveDialogVisible, weiYanDialogVisible, isPublic, addPictureDialog, pictureType, adminLove, love,
-    weiYanPagination, photoPagination, treeHoleList, photoTitleList, photoList, card, countdownChange, timing,
-    webStaticResourcePrefix, vditor } = toRefs(data)
+const { weiYanDialogVisible, isPublic, love,weiYanPagination, photoPagination, treeHoleList, photoTitleList,
+    photoList, card, countdownChange, timing,webStaticResourcePrefix } = toRefs(data)
 </script>
 <style>
 .warning-icon {
@@ -1098,6 +816,22 @@ const { userLove, loveDialogVisible, weiYanDialogVisible, isPublic, addPictureDi
 
 .isActive {
     animation: scale 2.5s ease-in-out infinite;
+}
+
+.tree-hole-go {
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 25px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.tree-hole-go i {
+    cursor: pointer;
+}
+
+.tree-hole-go i:hover {
+    animation: scale 1s linear infinite;
 }
 
 .family-button {

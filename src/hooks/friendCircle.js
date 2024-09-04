@@ -87,7 +87,8 @@ export default function () {
     function submitWeiYan(content) {
         let weiYan = {
             content: content,
-            isPublic: friendCircleData.isPublic
+            isPublic: friendCircleData.isPublic,
+            type: 'friend'
         };
 
         http.post(constant.baseURL + "/weiYan/saveWeiYan", weiYan)
@@ -95,6 +96,10 @@ export default function () {
                 friendCircleData.pagination.current = 1;
                 friendCircleData.pagination.size = 10;
                 friendCircleData.treeHoleList = [];
+                ElMessage({
+                    message: "发送成功！",
+                    type: 'success'
+                });
                 closeWeiYanDialog()
                 getWeiYan();
             })

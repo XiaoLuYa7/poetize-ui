@@ -146,7 +146,7 @@
         </div>
 
         <div class="toolButton">
-            <div class="backTop" v-if="toolButton">
+            <div class="backTop" v-if="toolButton" @click="toTop()">
                 <!-- 回到顶部按钮 -->
                 <svg viewBox="0 0 1024 1024" width="40" height="40" style="margin-left: 26px; cursor: pointer">
                     <path
@@ -358,8 +358,6 @@ onMounted(() => {
         let docWidth = document.body.clientWidth;
         data.mobile = docWidth < 900;
     });
-    console.log($('[data-popper-placement="bottom"]'))
-
 });
 
 onUnmounted(() => {
