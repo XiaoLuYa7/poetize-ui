@@ -91,9 +91,7 @@
                 </div>
 
                 <div class="article-info-news" @click="weiYanDialogVisible = true" v-if="
-                    !common.isEmpty(store.state.currentUser) &&
-                    store.state.currentUser.id === article.userId
-                ">
+                    !common.isEmpty(store.state.currentUser) && store.state.currentUser.id === article.userId">
                     <svg width="30" height="30" viewBox="0 0 1024 1024">
                         <path d="M0 0h1024v1024H0V0z" fill="#202425" opacity=".01"></path>
                         <path
@@ -153,7 +151,9 @@
                     </blockquote>
                     <!-- 订阅 -->
                     <div class="myCenter" id="article-like" @click="subscribeLabel()">
-                        <el-icon class="article-like-icon" :class="{ 'article-like': subscribe }"><Pointer/></el-icon>
+                        <el-icon class="article-like-icon" :class="{ 'article-like': subscribe }">
+                            <Pointer />
+                        </el-icon>
                     </div>
 
                     <!-- 评论 -->
@@ -247,41 +247,290 @@
             :close-on-click-modal="false" destroy-on-close center top="25vh">
             <div>
                 <div class="myCenter" style="margin-bottom: 20px">
-                    <el-date-picker v-model="newsTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime"
-                        align="center" placeholder="选择日期时间">
+                    <el-date-picker v-model="newsTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" align="center"
+                        placeholder="选择日期时间">
                     </el-date-picker>
                 </div>
                 <CommentBox @submitComment="submitWeiYan"></CommentBox>
             </div>
         </el-dialog>
 
-        <!-- 微信 -->
-        <el-dialog draggable title="密码" :modal="false" v-model="showPasswordDialog" width="25%" :append-to-body="true"
-            :close-on-click-modal="false" destroy-on-close center top="25vh">
-            <div>
-                <div>
-                    <div class="password-content">{{ tips }}</div>
+        <el-dialog draggable title="购买文章支付" v-model="buyArticleDialog" width="45%" :append-to-body="true"
+            :close-on-click-modal="false" destroy-on-close top="25vh" class="buy-artcile" :show-close="false">
+            <div class="text-box">
+                <div class="red-text">
+                    <div>
+                        【付费】查阅文章之前，需支付{{ payInfo.amount }}元，
+                    </div>
+                    <div style="margin-top: 10px;display: flex;justify-content:start;">
+                        <span style="width: 11%;">作者说：</span>
+                        <span style="width: 86%;">{{ payInfo.tips }}</span>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        注意：此次收费为买断制，支付成功后当前账号查阅无需收费！
+                    </div>
                 </div>
-                <div style="margin: 20px auto">
-                    <el-input maxlength="30" v-model="password"></el-input>
+                <div class="warn-text myCenter">
+                    <svg t="1725769112675" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="5482" width="32" height="32">
+                        <path
+                            d="M523.5712 906.0352c-218.9312 0-397.056-178.1248-397.056-397.056s178.1248-397.056 397.056-397.056 397.056 178.1248 397.056 397.056-178.1248 397.056-397.056 397.056z m0-742.9632c-190.72 0-345.856 155.136-345.856 345.856s155.136 345.856 345.856 345.856 345.856-155.136 345.856-345.856-155.136-345.856-345.856-345.856z"
+                            fill="#606D87" p-id="5483"></path>
+                        <path
+                            d="M649.6768 491.2128H397.4656c-14.1312 0-25.6-11.4688-25.6-25.6s11.4688-25.6 25.6-25.6h252.2624c14.1312 0 25.6 11.4688 25.6 25.6s-11.4688 25.6-25.6512 25.6zM649.6768 594.5344H397.4656c-14.1312 0-25.6-11.4688-25.6-25.6s11.4688-25.6 25.6-25.6h252.2624c14.1312 0 25.6 11.4688 25.6 25.6s-11.4688 25.6-25.6512 25.6z"
+                            fill="#FFAF50" p-id="5484"></path>
+                        <path
+                            d="M523.5712 748.6976c-14.1312 0-25.6-11.4688-25.6-25.6v-257.536c0-14.1312 11.4688-25.6 25.6-25.6s25.6 11.4688 25.6 25.6v257.536c0 14.1312-11.4688 25.6-25.6 25.6z"
+                            fill="#FFAF50" p-id="5485"></path>
+                        <path
+                            d="M521.1136 483.7376c-6.912 0-13.7728-2.7648-18.8416-8.2432L389.5808 353.2288a25.57952 25.57952 0 0 1 1.4848-36.1472 25.57952 25.57952 0 0 1 36.1472 1.4848l112.6912 122.2656a25.57952 25.57952 0 0 1-1.4848 36.1472c-4.9152 4.5568-11.1104 6.7584-17.3056 6.7584z"
+                            fill="#FFAF50" p-id="5486"></path>
+                        <path
+                            d="M523.5712 483.7376a25.57952 25.57952 0 0 1-18.8416-42.9056l112.6912-122.2656c9.5744-10.3936 25.8048-11.0592 36.1472-1.4848a25.57952 25.57952 0 0 1 1.4848 36.1472l-112.6912 122.2656a25.36448 25.36448 0 0 1-18.7904 8.2432z"
+                            fill="#FFAF50" p-id="5487"></path>
+                    </svg>
+                    <h2>{{ payInfo.amount }}</h2>
                 </div>
-                <div style="display: flex; justify-content: center">
-                    <ProButton :info="'提交'" @click="submitPassword()" :before="constant.before_color_2"
-                        :after="constant.after_color_2">
-                    </ProButton>
+                <div style="margin: 30px 0 20px 0">
+                    支付方式：
+                    <el-radio-group v-model="payType" class="radio-group">
+                        <el-radio :value="1" size="large" border class="radio-box">
+                            <div class="myCenter">
+                                <div
+                                    style="display: flex; flex-direction: column; justify-content:center;align-items: start;">
+                                    <span>支付宝支付</span>
+                                    <span>个人转账</span>
+                                    <span>不支持信用卡</span>
+                                </div>
+                                <svg t="1725767902962" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg" p-id="2548" width="32" height="32"
+                                    style="margin: 0 0 0 10px">
+                                    <path
+                                        d="M230.771014 576.556522c-12.614493 9.646377-25.228986 23.744928-28.93913 42.295652-5.194203 24.486957-0.742029 55.652174 22.26087 80.13913 28.93913 28.93913 72.718841 37.101449 92.011594 38.585508 51.2 3.710145 106.110145-22.26087 147.663768-50.457971 16.324638-11.130435 43.77971-34.133333 70.492754-69.750725-59.362319-30.423188-133.565217-64.556522-212.22029-61.588406-41.553623 1.484058-70.492754 9.646377-91.269566 20.776812zM983.188406 712.347826c25.971014-61.588406 40.811594-129.113043 40.811594-200.347826 0-281.971014-230.028986-512-512-512S0 230.028986 0 512s230.028986 512 512 512c170.666667 0 321.298551-83.849275 414.794203-212.22029C838.492754 768.742029 693.797101 696.023188 604.011594 652.985507c-42.295652 48.973913-105.368116 97.205797-176.602898 117.982609-44.521739 13.356522-85.333333 18.550725-126.886957 9.646377-42.295652-8.904348-72.718841-28.197101-90.527536-47.489855-8.904348-10.388406-19.292754-22.26087-27.455073-37.843479 0.742029 0.742029 0.742029 2.226087 0.742029 2.968116 0 0-4.452174-7.42029-7.420289-19.292753-1.484058-5.936232-2.968116-11.872464-3.710145-17.808696-0.742029-4.452174-0.742029-8.904348 0-12.614493-0.742029-7.42029 0-15.582609 1.484058-23.744927 4.452174-20.776812 12.614493-43.77971 35.617391-65.298551 48.973913-48.231884 115.014493-50.457971 149.147826-50.457971 50.457971 0.742029 138.017391 22.26087 212.22029 48.973913 20.776812-43.77971 34.133333-89.785507 42.295652-121.692754H304.973913v-33.391304h158.052174v-66.782609H272.324638v-34.133333h190.701449v-66.782609c0-8.904348 2.226087-16.324638 16.324638-16.324637h74.944927v83.107246h207.026087v33.391304H554.295652v66.782609H719.768116S702.701449 494.933333 651.501449 586.202899c115.014493 40.811594 277.518841 104.626087 331.686957 126.144927z m0 0"
+                                        fill="#06B4FD" p-id="2549"></path>
+                                </svg>
+                            </div>
+                        </el-radio>
+                        <el-radio :value="2" size="large" border class="radio-box">
+                            <div class="myCenter">
+                                <div
+                                    style="display: flex; flex-direction: column; justify-content:center;align-items: start;">
+                                    <span>微信支付</span>
+                                    <span>个人转账</span>
+                                    <span>不支持信用卡</span>
+                                </div>
+                                <svg t="1725767966081" class="icon" viewBox="0 0 1144 1024" version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg" p-id="3592" width="32" height="32"
+                                    style="margin: 0 0 0 10px">
+                                    <path
+                                        d="M436.314353 632.771765c-68.517647 36.321882-78.667294-20.389647-78.667294-20.389647l-85.835294-190.524236c-33.039059-90.533647 28.581647-40.839529 28.581647-40.839529s52.856471 38.038588 93.003294 61.229176c40.086588 23.190588 85.835294 6.806588 85.835294 6.806589l561.212235-246.362353C936.899765 80.112941 765.891765 0 572.235294 0 256.180706 0 0 213.232941 0 476.310588c0 151.311059 84.811294 285.967059 216.937412 373.248l-23.792941 130.288941s-11.625412 38.038588 28.611764 20.389647c27.437176-12.047059 97.370353-55.115294 138.992941-81.347764 65.445647 21.684706 136.734118 33.731765 211.486118 33.731764 316.024471 0 572.235294-213.232941 572.235294-476.310588 0-76.197647-21.594353-148.178824-59.843764-212.028235-178.808471 102.309647-594.733176 340.118588-648.312471 368.489412z"
+                                        fill="#43C93E" p-id="3593"></path>
+                                </svg>
+                            </div>
+                        </el-radio>
+                    </el-radio-group>
+                </div>
+                <div style="margin: 0 0 20px 0;">
+                    支付金额：<span style="color: red;"><span>{{ payInfo.amount }}</span></span> 元
+                </div>
+                <div class="myCenter">
+                    <el-button @click="cancelSelectPay()">取消</el-button>
+                    <el-button @click="pay()" type="primary">立即支付</el-button>
                 </div>
             </div>
+        </el-dialog>
+
+        <el-dialog draggable :title="payType === 1 ? '支付宝支付' : '微信支付'" v-model="showPayQrCode" width="45%"
+            :append-to-body="true" :close-on-click-modal="false" destroy-on-close top="25vh" :show-close="false">
+            <div class="myCenter" style="flex-direction: column;">
+                <div class="myCenter" style="margin-bottom: 20px">
+                    <svg v-if="payType === 1" t="1725955323939" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="8096" width="28" height="28"
+                        style="margin: 0 10px 0 0">
+                        <path
+                            d="M860.16 0C950.272 0 1024 73.889684 1024 164.163368v531.509895s-32.768-4.122947-180.224-53.355789c-40.96-14.362947-96.256-34.896842-157.696-57.478737 36.864-63.595789 65.536-137.485474 86.016-215.444211h-202.752v-71.841684h247.808V256.512h-247.808V135.437474h-100.352c-18.432 0-18.432 18.458947-18.432 18.458947v104.663579H200.704v41.040842h249.856v69.793684H243.712v41.013895H645.12c-14.336 51.307789-34.816 98.519579-57.344 141.608421-129.024-43.115789-268.288-77.985684-356.352-55.403789-55.296 14.362947-92.16 38.992842-112.64 63.595789-96.256 116.978526-26.624 295.504842 176.128 295.504842 120.832 0 237.568-67.718737 327.68-178.526316C757.76 742.858105 1024 853.692632 1024 853.692632v6.144C1024 950.110316 950.272 1024 860.16 1024H163.84C73.728 1024 0 950.137263 0 859.836632V164.163368C0 73.889684 73.728 0 163.84 0h696.32zM268.126316 553.121684c93.049263-10.374737 180.062316 26.974316 283.270737 78.874948-74.886737 95.501474-165.941895 155.701895-256.970106 155.701894-157.830737 0-204.368842-126.652632-125.466947-197.200842 26.300632-22.851368 72.838737-35.301053 99.166316-37.376z"
+                            fill="#00A0EA" p-id="8097"></path>
+                    </svg>
+                    <svg v-if="payType === 2" t="1725955395797" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="9963" width="28" height="28"
+                        style="margin: 0 10px 0 0">
+                        <path
+                            d="M891.380364 0h-764.043637C57.285818 0 0 57.297455 0 127.336727v764.043637c0 70.050909 57.297455 127.336727 127.336727 127.336727h764.043637c70.050909 0 127.336727-57.297455 127.336727-127.336727v-764.043637C1018.717091 57.285818 961.419636 0 891.380364 0z m-382.021819 783.150545c-44.567273 0-82.781091-6.376727-120.96-19.118545-25.472 12.741818-63.674182 44.567273-76.404363 50.944-25.472 12.730182-19.118545-12.741818-19.118546-12.741818l12.741819-76.404364C229.213091 674.909091 184.634182 592.128 184.634182 502.993455c0-159.185455 146.443636-286.510545 324.724363-286.510546 108.253091 0 210.094545 50.932364 267.403637 120.971636L458.437818 483.886545s-25.472 12.741818-50.944-6.353454l-50.932363-38.202182s-38.202182-31.848727-19.10691 19.083636l50.932364 114.618182s6.376727 31.825455 44.578909 12.730182c31.848727-12.730182 267.403636-159.162182 369.28-216.482909 19.118545 38.202182 31.825455 82.781091 31.825455 127.348364 0 152.808727-146.420364 286.522182-324.701091 286.522181z"
+                            fill="#48B338" p-id="9964"></path>
+                    </svg>
+
+                    <div style="display: flex;flex-direction: column;align-items: center;">
+                        <span>扫一扫付款（元）</span>
+                        <span style="color: rgb(251 149 42);font-size: 20px;font-weight: 1000;">
+                            {{ payInfo.amount }}
+                        </span>
+                    </div>
+                </div>
+                <el-card class="pay-card">
+                    <div style="display: flex;flex-direction: column;align-items: center;">
+                        <el-image :src="webStaticResourcePrefix + 'assets/image/zfb_qr_code.png'"
+                            style="width: 200px;height: 200px;" />
+                        <div class="myCenter">
+                            <svg t="1725953832198" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                xmlns="http://www.w3.org/2000/svg" p-id="5428" width="28" height="28">
+                                <path
+                                    d="M853.333333 938.666667h-128v-64h128a21.333333 21.333333 0 0 0 21.333334-21.333334v-138.666666a32 32 0 0 1 64 0V853.333333a85.333333 85.333333 0 0 1-85.333334 85.333334z m53.333334-597.333334a32 32 0 0 1-32-32V170.666667a21.333333 21.333333 0 0 0-21.333334-21.333334h-138.666666a32 32 0 0 1 0-64H853.333333a85.333333 85.333333 0 0 1 85.333334 85.333334v138.666666a32 32 0 0 1-32 32z m-597.333334-192H170.666667a21.333333 21.333333 0 0 0-21.333334 21.333334v138.666666a32 32 0 1 1-64 0V170.666667a85.333333 85.333333 0 0 1 85.333334-85.333334h138.666666a32 32 0 0 1 0 64z m-192 533.333334A32 32 0 0 1 149.333333 714.666667V853.333333a21.333333 21.333333 0 0 0 21.333334 21.333334h128v64H170.666667a85.333333 85.333333 0 0 1-85.333334-85.333334v-138.666666A32 32 0 0 1 117.333333 682.666667z"
+                                    fill="#333333" p-id="5429"></path>
+                                <path
+                                    d="M213.333333 480m32 0l533.333334 0q32 0 32 32l0 0q0 32-32 32l-533.333334 0q-32 0-32-32l0 0q0-32 32-32Z"
+                                    fill="#FF9C00" p-id="5430"></path>
+                            </svg>
+                            <div
+                                style="display: flex;flex-direction: column;align-items: center;margin: 0 0 10px 10px;">
+                                <span v-if="payType === 1">打开手机支付宝</span>
+                                <span v-if="payType === 2">打开手机微信</span>
+                                <span>扫一扫继续付款</span>
+                            </div>
+                        </div>
+                    </div>
+                </el-card>
+            </div>
+            <div class="myCenter" style="margin: 30px 0 20px;">
+                <el-button @click="cancelPay()">取消支付</el-button>
+                <el-button @click="paySuccess()" type="success">支付成功</el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog draggable title="填写工单" v-model="showWorkOrderDialog" width="45%" :append-to-body="true"
+            :close-on-click-modal="false" destroy-on-close top="15vh" :show-close="false">
+            <el-form ref="ruleFormRef" :model="workOrder" :rules="rules" label-width="auto" status-icon>
+                <el-form-item label="商户订单号" prop="orderNo" required>
+                    <el-input v-model="workOrder.orderNo" disabled />
+                </el-form-item>
+                <el-form-item label="文章标题" prop="articleTitle" required>
+                    <el-input v-model="workOrder.articleTitle" disabled />
+                </el-form-item>
+                <el-form-item label="支付方式" prop="payType" required>
+                    <el-radio-group v-model="workOrder.payType" class="radio-group" disabled>
+                        <el-radio :value="1" size="large" border class="radio-box"
+                            :style="workOrder.payType === 1 ? 'border-color: var(--el-color-primary);' : 'border-color: var(--el-border-color-lighter);'">
+                            <div class="myCenter">
+                                <div
+                                    style="display: flex; flex-direction: column; justify-content:center;align-items: start;">
+                                    <span style="line-height: 18px;">支付宝支付</span>
+                                    <span style="line-height: 18px;">个人转账</span>
+                                    <span style="line-height: 18px;">不支持信用卡</span>
+                                </div>
+                                <svg t="1725767902962" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg" p-id="2548" width="32" height="32"
+                                    style="margin: 0 0 0 10px">
+                                    <path
+                                        d="M230.771014 576.556522c-12.614493 9.646377-25.228986 23.744928-28.93913 42.295652-5.194203 24.486957-0.742029 55.652174 22.26087 80.13913 28.93913 28.93913 72.718841 37.101449 92.011594 38.585508 51.2 3.710145 106.110145-22.26087 147.663768-50.457971 16.324638-11.130435 43.77971-34.133333 70.492754-69.750725-59.362319-30.423188-133.565217-64.556522-212.22029-61.588406-41.553623 1.484058-70.492754 9.646377-91.269566 20.776812zM983.188406 712.347826c25.971014-61.588406 40.811594-129.113043 40.811594-200.347826 0-281.971014-230.028986-512-512-512S0 230.028986 0 512s230.028986 512 512 512c170.666667 0 321.298551-83.849275 414.794203-212.22029C838.492754 768.742029 693.797101 696.023188 604.011594 652.985507c-42.295652 48.973913-105.368116 97.205797-176.602898 117.982609-44.521739 13.356522-85.333333 18.550725-126.886957 9.646377-42.295652-8.904348-72.718841-28.197101-90.527536-47.489855-8.904348-10.388406-19.292754-22.26087-27.455073-37.843479 0.742029 0.742029 0.742029 2.226087 0.742029 2.968116 0 0-4.452174-7.42029-7.420289-19.292753-1.484058-5.936232-2.968116-11.872464-3.710145-17.808696-0.742029-4.452174-0.742029-8.904348 0-12.614493-0.742029-7.42029 0-15.582609 1.484058-23.744927 4.452174-20.776812 12.614493-43.77971 35.617391-65.298551 48.973913-48.231884 115.014493-50.457971 149.147826-50.457971 50.457971 0.742029 138.017391 22.26087 212.22029 48.973913 20.776812-43.77971 34.133333-89.785507 42.295652-121.692754H304.973913v-33.391304h158.052174v-66.782609H272.324638v-34.133333h190.701449v-66.782609c0-8.904348 2.226087-16.324638 16.324638-16.324637h74.944927v83.107246h207.026087v33.391304H554.295652v66.782609H719.768116S702.701449 494.933333 651.501449 586.202899c115.014493 40.811594 277.518841 104.626087 331.686957 126.144927z m0 0"
+                                        fill="#06B4FD" p-id="2549"></path>
+                                </svg>
+                            </div>
+                        </el-radio>
+                        <el-radio :value="2" size="large" border class="radio-box"
+                            :style="workOrder.payType === 2 ? 'border-color: var(--el-color-primary);' : 'border-color: var(--el-border-color-lighter);'">
+                            <div class="myCenter">
+                                <div
+                                    style="display: flex; flex-direction: column; justify-content:center;align-items: start;">
+                                    <span style="line-height: 18px;">微信支付</span>
+                                    <span style="line-height: 18px;">个人转账</span>
+                                    <span style="line-height: 18px;">不支持信用卡</span>
+                                </div>
+                                <svg t="1725767966081" class="icon" viewBox="0 0 1144 1024" version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg" p-id="3592" width="32" height="32"
+                                    style="margin: 0 0 0 10px">
+                                    <path
+                                        d="M436.314353 632.771765c-68.517647 36.321882-78.667294-20.389647-78.667294-20.389647l-85.835294-190.524236c-33.039059-90.533647 28.581647-40.839529 28.581647-40.839529s52.856471 38.038588 93.003294 61.229176c40.086588 23.190588 85.835294 6.806588 85.835294 6.806589l561.212235-246.362353C936.899765 80.112941 765.891765 0 572.235294 0 256.180706 0 0 213.232941 0 476.310588c0 151.311059 84.811294 285.967059 216.937412 373.248l-23.792941 130.288941s-11.625412 38.038588 28.611764 20.389647c27.437176-12.047059 97.370353-55.115294 138.992941-81.347764 65.445647 21.684706 136.734118 33.731765 211.486118 33.731764 316.024471 0 572.235294-213.232941 572.235294-476.310588 0-76.197647-21.594353-148.178824-59.843764-212.028235-178.808471 102.309647-594.733176 340.118588-648.312471 368.489412z"
+                                        fill="#43C93E" p-id="3593"></path>
+                                </svg>
+                            </div>
+                        </el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="支付金额" prop="payAmount" required>
+                    <el-input v-model="workOrder.payAmount" disabled />
+                </el-form-item>
+                <el-form-item prop="payOrderNo" required>
+                    <template #label>
+                        <div class="myCenter pop-el">
+                            交易订单号
+                            <el-popover placement="top-start" popper-class="pop-pay-tips" :width="200" trigger="hover">
+                                <template #reference>
+                                    <svg t="1726823848351" style="cursor: pointer;" viewBox="0 0 1024 1024"
+                                        version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2408" width="20"
+                                        height="20">
+                                        <path
+                                            d="M512 958.017C266.08 958.017 65.983 757.952 65.983 512 65.983 266.08 266.08 65.983 512 65.983c245.952 0 446.017 200.065 446.017 446.017S757.952 958.017 512 958.017z m0-828.034c-210.656 0-382.017 171.36-382.017 382.017 0 210.625 171.36 382.017 382.017 382.017 210.625 0 382.017-171.36 382.017-382.017S722.625 129.983 512 129.983z"
+                                            p-id="2409" fill="#707070"></path>
+                                        <path
+                                            d="M464 304c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48zM512 768c-17.665 0-32-14.303-32-32V448c0-17.665 14.335-32 32-32s32 14.335 32 32v288c0 17.697-14.335 32-32 32z"
+                                            p-id="2410" fill="#707070"></path>
+                                    </svg>
+                                </template>
+                                <template #default>
+                                    交易系统订单号：交易系统交易完成后自动生成的订单号。注：不是商户订单号
+                                </template>
+                            </el-popover>
+                        </div>
+                    </template>
+                    <el-input v-model="workOrder.payOrderNo" clearable maxlength="64" />
+                </el-form-item>
+                <el-form-item prop="payPicture" required>
+                    <template #label>
+                        <div class="myCenter pop-el">
+                            支付凭证
+                            <el-popover placement="top-start" title="示例图"
+                                popper-class="pop-pay-tips" :width="240" trigger="hover">
+                                <template #reference>
+                                    <svg t="1726823848351" style="cursor: pointer;" viewBox="0 0 1024 1024"
+                                        version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2408" width="20"
+                                        height="20">
+                                        <path
+                                            d="M512 958.017C266.08 958.017 65.983 757.952 65.983 512 65.983 266.08 266.08 65.983 512 65.983c245.952 0 446.017 200.065 446.017 446.017S757.952 958.017 512 958.017z m0-828.034c-210.656 0-382.017 171.36-382.017 382.017 0 210.625 171.36 382.017 382.017 382.017 210.625 0 382.017-171.36 382.017-382.017S722.625 129.983 512 129.983z"
+                                            p-id="2409" fill="#707070"></path>
+                                        <path
+                                            d="M464 304c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48zM512 768c-17.665 0-32-14.303-32-32V448c0-17.665 14.335-32 32-32s32 14.335 32 32v288c0 17.697-14.335 32-32 32z"
+                                            p-id="2410" fill="#707070"></path>
+                                    </svg>
+                                </template>
+                                <template #default>
+                                    <el-image v-if="workOrder.payType == 1" style="width: 220px;height: 200px"
+                                        :src="webStaticResourcePrefix + 'assets/image/zfb_tips.png'"
+                                        fit="cover"></el-image>
+                                    <el-image v-else-if="workOrder.payType == 2" style="width: 220px;height: 200px"
+                                        :src="webStaticResourcePrefix + 'assets/image/wx_tips.png'"
+                                        fit="cover"></el-image>
+                                </template>
+                            </el-popover>
+                        </div>
+                    </template>
+                    <div class="myCenter" style="flex-direction: column;width: 100%">
+                        <div style="display: flex;width: 100%">
+                            <el-input v-model="workOrder.payPicture" disabled></el-input>
+                            <el-image class="upload-img" lazy style="margin-left: 10px" :src="workOrder.payPicture"
+                                fit="cover"></el-image>
+                        </div>
+                        <UploadPicture :prefix="'orderVoucher'" style="margin-top: 10px;width: 100%"
+                            @addPicture="addOrderVoucher" :maxSize="2" :maxNumber="1"></UploadPicture>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="myCenter" style="margin: 30px 0 20px;width: 100%;margin-left: 20%">
+                        <el-button @click="cancelOrder(ruleFormRef)">取消</el-button>
+                        <el-button @click="submitOrder(ruleFormRef)" type="primary">提交工单</el-button>
+                    </div>
+                </el-form-item>
+            </el-form>
+
         </el-dialog>
     </div>
 </template>
 
 <script setup>
 import MyFooter from '../components/common/MyFooter.vue';
-import ProButton from '../components/common/ProButton.vue';
 import Comment from '../components/comment/Comment.vue';
 import Process from '../components/common/Process.vue';
 import CommentBox from '../components/comment/CommentBox.vue';
 import VideoPlayer from '../components/common/VideoPlayer.vue';
+import UploadPicture from '../components/common/UploadPicture.vue';
 
 import { useRoute, useRouter } from 'vue-router';
 import MarkdownIt from 'markdown-it';
@@ -290,10 +539,10 @@ import videoPlayerPlugin from '../utils/markdown-it-video-plugin.js';
 import openLinksPlugin from '../utils/markdown-it-link-open-plugin.js';
 import multimdTablePlugin from 'markdown-it-multimd-table';
 
-import { reactive, inject, toRefs, nextTick, onMounted, onUnmounted, watch } from 'vue';
+import { reactive, inject, toRefs, nextTick, onMounted, onUnmounted, watch, ref } from 'vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 
-import {Pointer} from '@element-plus/icons-vue'
+import { Pointer } from '@element-plus/icons-vue'
 import { useStore } from 'vuex';
 
 const route = useRoute();
@@ -315,17 +564,53 @@ const data = reactive({
     weiYanDialogVisible: false,
     copyrightDialogVisible: false,
     newsTime: '',
-    showPasswordDialog: false,
-    password: '',
-    tips: '',
     scrollTop: 0,
+    buyArticleDialog: false,
+    payInfo: {
+        tips: '',
+        amount: ''
+    },
+    payType: 1,
+    showPayQrCode: false,
+    showWorkOrderDialog: false,
+    webStaticResourcePrefix: import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX,
+    workOrder: {
+        orderNo: '',
+        articleTitle: '',
+        userId: '',
+        articleId: '',
+        payType: '',
+        payAmount: '',
+        payPicture: '',
+        payOrderNo: ''
+    },
+    rules: {
+        orderNo: [
+            { required: true, message: '请输入商家订单号', trigger: 'change' },
+        ],
+        articleTitle: [
+            { required: true, message: '请输入文章标题', trigger: 'change' },
+        ],
+        payType: [
+            { required: true, message: '请输入支付方式', trigger: 'change' },
+        ],
+        payAmount: [
+            { required: true, message: '请输入支付金额', trigger: 'change' },
+        ],
+        payOrderNo: [
+            { required: true, message: '请输入交易订单号', trigger: 'change' },
+        ],
+        payPicture: [{ required: true, message: '请上传支付凭证', trigger: 'change' }],
+    },
 });
+
+const ruleFormRef = ref(null);
 
 onMounted(() => {
     window.addEventListener('scroll', onScrollPage);
 
     if (!common.isEmpty(data.id)) {
-        getArticle(localStorage.getItem('article_password_' + data.id));
+        getArticle();
 
         ElNotification.success({
             title: '文章订阅',
@@ -385,7 +670,7 @@ const subscribeLabel = () => {
         .then(() => {
             http.get(constant.baseURL + '/user/subscribe', {
                 labelId: data.article.labelId,
-                flag: !data.subscribe,
+                flag: !data.subscribe
             }).then((res) => {
                 if (!common.isEmpty(res.data)) {
                     store.commit('loadCurrentUser', res.data);
@@ -394,7 +679,7 @@ const subscribeLabel = () => {
             }).catch((error) => {
                 ElMessage({
                     message: error.message,
-                    type: 'error',
+                    type: 'error'
                 });
             });
         })
@@ -406,17 +691,6 @@ const subscribeLabel = () => {
         });
 };
 
-const submitPassword = () => {
-    if (common.isEmpty(data.password)) {
-        ElMessage({
-            message: '请先输入密码！',
-            type: 'error',
-        });
-        return;
-    }
-
-    getArticle(data.password);
-};
 
 const deleteTreeHole = (id) => {
     if (common.isEmpty(store.state.currentUser)) {
@@ -542,10 +816,10 @@ const addId = () => {
     headings.attr('id', (i, id) => id || 'toc-' + i);
 };
 
-const getArticle = (password) => {
+const getArticle = () => {
     http.get(constant.baseURL + '/article/getArticleById', {
-        id: data.id,
-        password: password,
+        articleId: data.id,
+        userId: common.isEmpty(store.state.currentUser) ? '' : store.state.currentUser.id,
     })
         .then((res) => {
             if (!common.isEmpty(res.data)) {
@@ -563,10 +837,6 @@ const getArticle = (password) => {
                     addId();
                     getTocbot();
                 });
-                if (!common.isEmpty(password)) {
-                    localStorage.setItem('article_password_' + data.id, password);
-                }
-                data.showPasswordDialog = false;
                 if (
                     !common.isEmpty(store.state.currentUser) &&
                     !common.isEmpty(store.state.currentUser.subscribe)
@@ -578,30 +848,158 @@ const getArticle = (password) => {
             }
         })
         .catch((error) => {
-            if ('密码错误' === error.message.substr(0, 4)) {
-                if (!common.isEmpty(password)) {
-                    localStorage.removeItem('article_password_' + data.id);
-                    ElMessage({
-                        message: '密码错误，请重新输入！',
-                        type: 'error',
-                        customClass: 'message-index',
-                    });
-                }
-                data.tips = error.message.substr(4);
-                data
-
-                    .showPasswordDialog = true;
-            } else {
-                ElMessage({
-                    message: error.message,
-                    type: 'error',
-                    customClass: 'message-index',
+            if (error.message === '待审核') {
+                ElMessageBox.alert('您在该文章下有一笔订单正在审核中，请等待审核结果~~', '⛔文章提示', {
+                    autofocus: false,
+                    confirmButtonText: '确定',
+                    showClose: false,
+                    customStyle: 'background-color: rgb(234 229 203);',
+                    callback: () => {
+                        router.push({ path: '/' });
+                    }
                 });
-                data.tips = error.message;
-                data.showPasswordDialog = true;
+                return;
             }
+
+            if (error.message === '请先登录') {
+                ElMessageBox.alert('当前文章是私有文章，请先登录，确保拥有相关权限', '⛔文章提示', {
+                    autofocus: false,
+                    confirmButtonText: '确定',
+                    customStyle: 'background-color: rgb(234 229 203);',
+                    showClose: false,
+                    callback: () => {
+                        router.push({ path: '/' });
+                    }
+                });
+                return;
+            }
+            // 根据data.id获取付费金额
+            http.get(constant.baseURL + '/article/getPayInfo', {
+                articleId: data.id
+            }).then((res) => {
+                data.buyArticleDialog = true;
+                data.payInfo.amount = res.data.amount;
+                data.payInfo.tips = res.data.tips;
+                data.workOrder.articleTitle = res.data.articleTitle;
+            })
+
         });
 };
+
+const cancelSelectPay = () => {
+    data.buyArticleDialog = false;
+    ElMessage({
+        message: '取消支付',
+        type: 'error',
+    });
+    router.push({ path: '/' })
+}
+
+const cancelPay = () => {
+    data.showPayQrCode = false;
+    data.buyArticleDialog = true;
+    ElMessage({
+        message: '取消扫码，可选择支付方式后重新支付',
+        type: 'warning',
+    });
+}
+
+const pay = () => {
+    if (common.isEmpty(data.payType)) {
+        ElMessage({
+            message: '请选择支付方式',
+            type: 'error',
+        });
+        return;
+    }
+    data.buyArticleDialog = false;
+    data.showPayQrCode = true;
+}
+
+const paySuccess = () => {
+    data.showPayQrCode = false;
+    data.showWorkOrderDialog = true;
+    data.workOrder.articleId = data.id;
+    data.workOrder.payType = data.payType;
+    data.workOrder.payAmount = data.payInfo.amount;
+    data.workOrder.orderNo = generateOrderNumber();
+}
+
+const addOrderVoucher = (res) => {
+    data.workOrder.payPicture = res
+}
+
+const cancelOrder = () => {
+    ElMessageBox.confirm('确定取消填写工单吗？后续可重新进入支付界面进入填写工单！！！', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+    }).then(() => {
+        data.showWorkOrderDialog = false;
+        data.showPayQrCode = false;
+        data.buyArticleDialog = false;
+        router.push({ path: '/' });
+    });
+}
+
+const submitOrder = (formEl) => {
+    if (!formEl) return
+    formEl.validate((valid) => {
+        if (valid) {
+            // 向后台新增订单记录
+            let param = {
+                articleId: data.id,
+                payType: data.payType,
+                payAmount: data.payInfo.amount,
+                orderNo: data.workOrder.orderNo,
+                userId: common.isEmpty(store.state.currentUser) ? '' : store.state.currentUser.id,
+                payOrderNo: data.workOrder.payOrderNo,
+                payPicture: data.workOrder.payPicture
+            }
+
+            http.post(constant.baseURL + '/workOrder/addWorkOrder', param, false)
+                .then((res) => {
+                    ElMessage({
+                        message: '订单保存成功，请等待管理员审核(*^_^*)',
+                        type: 'success',
+                    });
+                    data.showWorkOrderDialog = false;
+                    data.showPayQrCode = false;
+                    data.buyArticleDialog = false;
+                    router.push({ path: '/' });
+                })
+                .catch((error) => {
+                    ElMessage({
+                        message: error.message,
+                        type: 'error',
+                    });
+                });
+        }
+    })
+}
+
+const generateOrderNumber = () => {
+    // 获取当前日期和时间
+    const now = new Date();
+    // 格式化日期和时间为 yyyyMMddHHmmss
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以要加1
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    // 拼接日期时间字符串
+    const dateTimeString = `${year}${month}${day}${hours}${minutes}${seconds}`;
+
+    // 生成一个四位数的随机数
+    const randomNum = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+
+    // 组合成订单号
+    const orderNumber = `${dateTimeString}${randomNum}`;
+
+    return orderNumber;
+}
 
 const highlight = () => {
     const attributes = {
@@ -709,7 +1107,9 @@ const highlight = () => {
             .wrap("<div class='table-wrapper'></div>");
     }
 };
-const { id, subscribe, article, articleContentHtml, treeHoleList, weiYanDialogVisible, copyrightDialogVisible, newsTime, showPasswordDialog, password, tips, scrollTop } = toRefs(data)
+const { id, subscribe, article, articleContentHtml, treeHoleList, weiYanDialogVisible, copyrightDialogVisible,
+    newsTime, buyArticleDialog, payInfo, payType, showPayQrCode, showWorkOrderDialog, webStaticResourcePrefix,
+    workOrder, rules } = toRefs(data)
 
 </script>
 <style>
@@ -842,9 +1242,38 @@ const { id, subscribe, article, articleContentHtml, treeHoleList, weiYanDialogVi
     background: white;
     cursor: pointer;
 }
+
+.tips-box {
+    width: 400px;
+    background-color: #f2edd6;
+}
+
+.tips-box .el-message-box__title>span {
+    font-weight: bold;
+}
+
+.buy-artcile {
+    background-color: #f4f4ef !important;
+}
+
+.pay-card>div {
+    padding: 0 10px 10px 10px;
+}
+
+.pop-el>span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>
 
 <style scoped>
+.upload-img {
+    border-radius: 2px;
+    width: 40px;
+    height: 40px;
+}
+
 .article-head {
     height: 40vh;
     position: relative;
@@ -1000,12 +1429,6 @@ blockquote {
     border-bottom: unset;
 }
 
-.password-content {
-    font-size: 13px;
-    color: var(--maxGreyFont);
-    line-height: 1.5;
-}
-
 #toc-button {
     position: fixed;
     right: 3vh;
@@ -1029,6 +1452,33 @@ blockquote {
     font-size: 16px;
 }
 
+.text-box {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.red-text {
+    width: 100%;
+    background-color: rgba(114, 208, 214, 0.664);
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    padding: 20px 10px 20px 10px;
+}
+
+.warn-text {
+    width: 100%;
+    height: 60px;
+    background-color: rgb(243, 243, 216);
+    color: red;
+}
+
+.radio-box {
+    height: 7vh;
+}
+
 @media screen and (max-width: 700px) {
     .article-info-container {
         left: 20px;
@@ -1043,6 +1493,20 @@ blockquote {
 @media screen and (max-width: 400px) {
     #toc-button {
         right: 0.5vh;
+    }
+}
+
+@media screen and (max-width: 872px) {
+    .radio-group {
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 694px) {
+    .radio-box {
+        height: 7vh;
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
 }
 </style>

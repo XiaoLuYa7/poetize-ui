@@ -12,7 +12,7 @@
                 </svg>
                 基础信息
             </el-tag>
-            <el-form :model="webInfo" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="webInfo" :rules="rules" ref="ruleForm" label-width="100px">
                 <el-form-item label="网站名称" prop="webName">
                     <el-input v-model="webInfo.webName"></el-input>
                 </el-form-item>
@@ -23,10 +23,6 @@
 
                 <el-form-item label="页脚" prop="footer">
                     <el-input v-model="webInfo.footer"></el-input>
-                </el-form-item>
-
-                <el-form-item label="状态" prop="status">
-                    <el-switch v-model="webInfo.status"></el-switch>
                 </el-form-item>
 
                 <el-form-item label="背景" prop="backgroundImage">
@@ -187,11 +183,14 @@
 import UploadPicture from '../../components/common/UploadPicture.vue'
 import { nextTick, reactive, inject, toRefs, onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useStore } from 'vuex';
 
 // hooks
 const common = inject("$common");
 const constant = inject("$constant");
 const http = inject("$http");
+
+const store = useStore();
 
 const data = reactive({
     types: ['primary', 'success', 'info', 'danger', 'warning'],
@@ -209,8 +208,7 @@ const data = reactive({
         webTitle: '',
         footer: '',
         backgroundImage: '',
-        avatar: '',
-        status: false,
+        avatar: ''
     },
     notices: [],
     randomAvatar: [],
@@ -233,10 +231,7 @@ const data = reactive({
         backgroundImage: [
             { required: true, message: '请输入背景', trigger: 'change' },
         ],
-        status: [
-            { required: true, message: '请设置网站状态', trigger: 'change' },
-        ],
-        avatar: [{ required: true, message: '请上传头像', trigger: 'change' }],
+        avatar: [{ required: true, message: '请上传头像', trigger: 'change' }]
     }
 });
 
@@ -260,7 +255,6 @@ const getWebInfo = () => {
                 data.webInfo.footer = res.data.footer
                 data.webInfo.backgroundImage = res.data.backgroundImage
                 data.webInfo.avatar = res.data.avatar
-                data.webInfo.status = res.data.status
                 data.notices = JSON.parse(res.data.notices)
                 data.randomAvatar = JSON.parse(res.data.randomAvatar)
                 data.randomName = JSON.parse(res.data.randomName)

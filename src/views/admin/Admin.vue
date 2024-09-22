@@ -1,27 +1,18 @@
 <template>
     <div>
-        <el-config-provider :locale="zhCn">
-            <MyHeader></MyHeader>
-            <Sidebar></Sidebar>
-            <div class="content-box">
-                <div class="content">
-                    <router-view></router-view>
-                </div>
+        <MyHeader></MyHeader>
+        <Sidebar></Sidebar>
+        <div class="content-box">
+            <div class="content">
+                <router-view></router-view>
             </div>
-        </el-config-provider>
-
+        </div>
     </div>
 </template>
 
 <script setup>
 import MyHeader from './common/MyHeader.vue'
 import Sidebar from './common/Sidebar.vue'
-import zhCn from "element-plus/es/locale/lang/zh-cn"
-
-// 修改分页器默认文字
-zhCn.el.pagination.total = "总计：" + `{total}` + "条"
-// zhCn.el.pagination.goto = "跳转至"
-
 
 let root = document.querySelector(':root')
 let webStaticResourcePrefix = import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX

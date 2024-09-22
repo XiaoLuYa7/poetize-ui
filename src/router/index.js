@@ -65,6 +65,10 @@ const routes = [
                 path: '/letter',
                 name: 'letter',
                 component: () => import('../views/Letter.vue')
+            },{
+                path: '/userOrder',
+                name: 'userOrder',
+                component: () => import('../views/UserOrder.vue')
             }
         ]
     },
@@ -133,6 +137,10 @@ const routes = [
                 path: '/resourcePathList',
                 name: 'resourcePathList',
                 component: () => import('../views/admin/ResourcePathList.vue')
+            }, {
+                path: '/order',
+                name: 'order',
+                component: () => import('../views/admin/Order.vue')
             }
         ]
     },

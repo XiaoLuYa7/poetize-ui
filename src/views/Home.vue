@@ -12,7 +12,8 @@
                                 route.path === '/favorite' ||
                                 route.path === '/letter' ||
                                 route.path === '/user' ||
-                                route.path === '/login') &&
+                                route.path === '/login' ||
+                                route.path === '/userOrder') &&
                             !toolbar.enter,
                     },
                 ]" class="toolbar-content myBetween">
@@ -26,7 +27,9 @@
                 <!-- 手机导航按钮 -->
                 <div v-if="common.mobile() || mobile" class="toolbar-mobile-menu"
                     @click="toolbarDrawer = !toolbarDrawer" :class="{ enter: toolbar.enter }">
-                    <el-icon><Operation /></el-icon>
+                    <el-icon>
+                        <Operation />
+                    </el-icon>
                 </div>
 
                 <!-- 导航列表 -->
@@ -45,12 +48,12 @@
                             <div class="my-menu"><span>❤️‍🔥 家</span></div>
                         </li>
 
-                        <el-dropdown :hide-timeout="50" ref="dropdown" placement="bottom">
+                        <el-dropdown :hide-timeout="50" popper-class="sort-down" ref="dropdown" placement="bottom">
                             <li>
                                 <div class="my-menu"><span>📒 记录</span></div>
                             </li>
                             <template #dropdown>
-                                <el-dropdown-menu class="el-dropdown-menu" style="width: 160px">
+                                <el-dropdown-menu class="el-dropdown-menu sort-menu" style="width: 180px">
                                     <!--  class="dropdown-menu-item" -->
                                     <el-dropdown-item v-for="(sort, index) in sortInfo" :key="index" class="myCenter">
                                         <div @click="
@@ -82,9 +85,8 @@
                         </li>
 
                         <!-- 聊天室 -->
-                        <li @click="goIm()" v-show="!common.isEmpty(store.state.webInfo) &&
-                            store.state.webInfo.imStatus
-                            ">
+                        <li @click="goIm()"
+                            v-show="!common.isEmpty(store.state.webInfo) && store.state.webInfo.imStatus">
                             <div class="my-menu">💬 <span>联系我</span></div>
                         </li>
 
@@ -99,41 +101,44 @@
                         <!-- 个人中心 -->
                         <li>
                             <template v-if="common.isEmpty(store.state.currentUser)">
-                                <div class="header-avatar-wrap">
+                                <div class="header-avatar-wrap" style="margin-top: 10px;">
                                     <div class="default-login" @click="router.push({ path: '/login' })">
                                         登陆
                                     </div>
                                 </div>
                             </template>
                             <template v-if="!common.isEmpty(store.state.currentUser)">
-                                <el-dropdown placement="bottom-end" :hide-timeout="50">
-                                    <div class="myCenter" style="width: 40px;height: 40px;">
-                                        <el-avatar class="user-avatar" :size="36" style="margin-top: 12px"
-                                        :src="store.state.currentUser.avatar">
-                                    </el-avatar>
-                                    </div>
-
-                                    <template v-slot:dropdown>
-                                        <el-dropdown-menu style="width: 150px; font-size: 14px">
-                                            <el-dropdown-item  @click="router.push({ path: '/user' })"
-                                                v-if="!common.isEmpty(store.state.currentUser)" class="myCenter"
-                                                style="width: 130px; margin-left: 10px">
-                                                <div class="dropdown-menu-item">
-                                                    <i class="fa fa-user-circle" aria-hidden="true"></i>
-                                                    <span>个人中心</span>
-                                                </div>
-                                            </el-dropdown-item>
-                                            <el-dropdown-item @click="logout()"
-                                                v-if="!common.isEmpty(store.state.currentUser)" class="myCenter"
-                                                style="width: 130px; margin-left: 10px">
-                                                <div class="dropdown-menu-item">
-                                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                                    <span>退出</span>
-                                                </div>
-                                            </el-dropdown-item>
-                                        </el-dropdown-menu>
+                                <el-popover placement="top-end" ref="popoverRef" @before-leave="avatarPopLeave()" @before-enter="avatarPopShow()"
+                                    trigger="hover" popper-class="user-pop" popper-style="z-index: 99">
+                                    <template #reference>
+                                        <div class="header-avatar-wrap" style="width: 40px;height: 40px;">
+                                            <el-avatar class="user-avatar" :size="36" style="margin-top: 8px"
+                                                :src="store.state.currentUser.avatar" ref="userAvatar">
+                                            </el-avatar>
+                                        </div>
                                     </template>
-                                </el-dropdown>
+                                    <template #default>
+                                        <div class="user-content">
+                                            <div class="user-header">{{greeting}}</div>
+                                            <div class="user-content-item" @click="toUser()">
+                                                <i class="fa fa-user-circle" aria-hidden="true" />
+                                                <span style="margin-left: 6px;">个人中心</span>
+                                                <i class="fa fa-angle-right" aria-hidden="true" style="float: right;" />
+                                            </div>
+                                            <div class="user-content-item" @click="toOrder()">
+                                                <i class="fa fa-shopping-bag" aria-hidden="true" />
+                                                <span style="margin-left: 6px;">订单管理</span>
+                                                <i class="fa fa-angle-right" aria-hidden="true" style="float: right;" />
+                                            </div>
+                                            <el-divider style="width: 90%;margin: 12px 0px" />
+                                            <div class="user-content-item" @click="toLogOut()">
+                                                <i class="fa fa-sign-out" aria-hidden="true" />
+                                                <span style="margin-left: 6px;">退出</span>
+                                                <i class="fa fa-angle-right" aria-hidden="true" style="float: right;" />
+                                            </div>
+                                        </div>
+                                    </template>
+                                </el-popover>
                             </template>
                         </li>
                     </ul>
@@ -177,7 +182,9 @@
                 <div class="my-setting">
                     <div>
                         <!-- 太阳按钮 -->
-                        <el-icon v-if="isDark" class="iconRotate" @click="changeColor()"><Sunny /></el-icon>
+                        <el-icon v-if="isDark" class="iconRotate" @click="changeColor()">
+                            <Sunny />
+                        </el-icon>
                         <!-- 月亮按钮 -->
                         <i v-else class="fa fa-moon-o" aria-hidden="true" @click="changeColor()"></i>
                     </div>
@@ -200,15 +207,15 @@
             </div>
         </div>
 
-        <el-drawer v-model="toolbarDrawer" :show-close="false" size="65%" class="toolbarDrawer"
-            title="欢迎光临" direction="ltr">
+        <el-drawer v-model="toolbarDrawer" :show-close="false" size="65%" class="toolbarDrawer" title="欢迎光临"
+            direction="ltr">
             <div>
                 <ul class="small-menu">
                     <li @click="smallMenu({ path: '/' })">
                         <div>🏡 <span>首页</span></div>
                     </li>
 
-                    <li @click="router.push({ path: '/content' })">
+                    <li @click="smallMenu({ path: '/content' })">
                         <div class="my-menu">🌏 <span>内容</span></div>
                     </li>
 
@@ -221,7 +228,9 @@
                         <div style="display: flex" @click="hideOrShow()">
                             <div>📒 记录</div>
                             <div style="margin-left: 60px">
-                                <el-icon><ArrowDown /></el-icon>
+                                <el-icon>
+                                    <ArrowDown />
+                                </el-icon>
                             </div>
                         </div>
                         <div class="my-animation-hideToShow" v-show="sortMenu">
@@ -244,14 +253,12 @@
                     </li>
 
                     <!-- 关于 -->
-                    <li @click="router.push({ path: '/about' })">
+                    <li @click="smallMenu({ path: '/about' })">
                         <div class="my-menu">🐟 <span>关于</span></div>
                     </li>
 
                     <!-- 聊天室 -->
-                    <li @click="goIm()" v-show="!common.isEmpty(store.state.webInfo) &&
-                        store.state.webInfo.imStatus
-                        ">
+                    <li @click="goIm()" v-show="!common.isEmpty(store.state.webInfo) && store.state.webInfo.imStatus">
                         <div>💬 <span>联系我</span></div>
                     </li>
 
@@ -278,6 +285,12 @@
                                 <span>&nbsp;个人中心</span>
                             </div>
                         </li>
+                        <li @click="smallMenu({ path: '/user' })">
+                            <div>
+                                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                                <span>&nbsp;订单管理</span>
+                            </div>
+                        </li>
                         <li @click="smallMenuLogout()">
                             <div>
                                 <i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -297,7 +310,7 @@ import mousedown from "../utils/mousedown";
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import {Operation,ArrowDown,Sunny} from '@element-plus/icons-vue'
+import { Operation, ArrowDown, Sunny } from '@element-plus/icons-vue';
 
 // hooks
 const common = inject("$common");
@@ -317,10 +330,15 @@ const data = reactive({
     toolbarDrawer: false,
     mobile: false,
     showElement: false,
-    sortMenu: false
+    sortMenu: false,
+    greeting: '',
+    userPopVisible: false
 });
 
-const dropdown = ref(null)
+const dropdown = ref(null);
+const popoverRef = ref(null);
+const userAvatar = ref(null);
+
 
 onMounted(() => {
     if (data.mouseAnimation) {
@@ -358,6 +376,8 @@ onMounted(() => {
         let docWidth = document.body.clientWidth;
         data.mobile = docWidth < 900;
     });
+
+    updateGreeting();
 });
 
 onUnmounted(() => {
@@ -382,14 +402,14 @@ watch(() => data.scrollTop, (newScrollTop, oldScrollTop) => {
 const toolbar = computed(() => store.state.toolbar);
 const sortInfo = computed(() => store.state.sortInfo);
 
-const smallMenu = (data) => {
-    router.push(data);
+const smallMenu = (route) => {
     data.toolbarDrawer = false;
+    router.push(route);
 };
 
 const smallMenuLogout = () => {
-    logout();
     data.toolbarDrawer = false;
+    logout();
 };
 
 const hideOrShow = () => {
@@ -413,10 +433,64 @@ const goIm = () => {
     }
 };
 
+// 每小时执行
+setInterval(() => {
+    updateGreeting();
+}, 3600000);
+
+const updateGreeting = () => {
+    const now = new Date();
+    const hour = now.getHours();
+    let name = '';
+    if (!common.isEmpty(store.state.currentUser)) {
+        name = store.state.currentUser.username
+    }
+
+    if (hour >= 5 && hour < 11) {
+        data.greeting ='早上好 '+name;
+    } else if (hour >= 11 && hour < 13) {
+        data.greeting = '中午好 '+name;
+    }else if (hour >= 13 && hour < 18) {
+        data.greeting = '下午好 '+name;
+    } else if (hour >= 18 && hour < 22) {
+        data.greeting = '晚上好 '+name;
+    } else {
+        data.greeting = '晚安 ' + name;
+    }
+}
 
 const goAdmin = () => {
     window.open(constant.webURL + "/admin");
 };
+
+const toUser = () => {
+    closePopover();
+    router.push({ path: '/user' });
+};
+
+const toOrder = () => {
+    closePopover();
+    router.push({ path: '/userOrder' });
+};
+
+const toLogOut = () => {
+    closePopover();
+    logout();
+};
+
+const avatarPopLeave = ()=> {
+    userAvatar.value.$el.classList.remove('user-avatar-move');
+}
+
+const avatarPopShow = ()=> {
+    userAvatar.value.$el.classList.add('user-avatar-move');
+}
+
+
+const closePopover = () => {
+    console.log(popoverRef.value)
+    popoverRef.value.hide();
+}
 
 const logout = () => {
     http.get(constant.baseURL + "/user/logout")
@@ -575,7 +649,8 @@ const changeMouseAnimation = () => {
     }
 };
 
-const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer, mobile, showElement, sortMenu } = toRefs(data)
+const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer, mobile, showElement, sortMenu,greeting} = toRefs(data)
+
 </script>
 
 <style>
@@ -583,9 +658,130 @@ const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer
     background-color: hsla(0, 0%, 100%, 0.3137254901960784) !important;
     border: none;
 }
+
+.el-popper.sort-down.is-light {
+    background-color: hsla(0, 0%, 100%, 0.2) !important;
+    border-radius: 8px;
+    width: 180px;
+    border: none;
+    backdrop-filter: blur(20px);
+    margin-top: -18px;
+}
+
+.sort-menu .el-dropdown-menu__item:hover {
+    background-color: unset !important;
+    color: unset;
+}
+
+.sort-menu .el-dropdown-menu__item {
+    padding: 0px 5px !important;
+    font-size: 14px;
+}
+
+.sort-down .el-popper__arrow .el-popper.is-light,
+.sort-down.el-popper.is-light>.el-popper__arrow:before {
+    background: rgb(0 0 0 / 0%);
+}
+
+.user-pop {
+    width: 250px !important;
+}
+
+.el-popper.is-light.el-popover.user-pop {
+    top:70px !important
+}
+
+.user-pop .el-popper__arrow {
+    display: none;
+}
 </style>
 
 <style scoped>
+.dropdown-menu-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 90%;
+    margin-left: 5%;
+    color: rgba(0, 0, 0, 0.5647058823529412);
+    font-weight: 700;
+    padding: 6px 0px;
+    text-align: center;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12549019607843137);
+    border-radius: 8px;
+    margin: 4px 0px;
+    background-color: hsla(0, 0%, 100%, 0.6);
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu-item:hover {
+    background-color: hsla(198, 64%, 62%, 0.565);
+}
+
+.el-dropdown-menu {
+    background-color: hsla(0, 0%, 100%, 0.2) !important;
+    border-radius: 8px;
+    border: unset;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.user-avatar {
+    cursor: pointer;
+    user-select: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #fff;
+    transition: width .3s ease,height .3s ease,top .3s ease,left .3s ease
+}
+
+.user-avatar-move {
+    top: 25px;
+    left: -120px;
+    width: 70px;
+    height: 70px;
+}
+
+.user-avatar:hover {
+    transform: rotate(360deg);
+}
+
+
+.user-content {
+    width: 90%;
+    margin: 16% 5% 5% 5%;
+}
+
+.user-content-item {
+    width: 90%;
+    margin: 5px 5% 10px 5%;
+    height: 35px;
+    padding: 9px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.user-content-item:hover {
+    background-color: #d2d1d1;
+}
+
+.user-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 1000;
+    color: #000;
+    margin: 0 0 10px 0;
+}
+
 .toolbar-content {
     width: 100%;
     height: 60px;
@@ -683,7 +879,6 @@ const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer
 
 .header-avatar-wrap {
     position: relative;
-    margin-top: 10px;
     width: 40px;
     height: 40px;
     cursor: pointer;

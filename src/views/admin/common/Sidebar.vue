@@ -48,7 +48,7 @@
 import { onMounted, reactive, shallowRef, toRefs } from 'vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { Menu, SwitchFilled, Setting, User, Postcard, Notebook, Edit, ChatLineRound, Paperclip, CreditCard, Sugar  } from '@element-plus/icons-vue';
+import { Menu, SwitchFilled, Setting, User, Postcard, Notebook, Edit, ChatLineRound, Paperclip, CreditCard, Sugar, GoodsFilled  } from '@element-plus/icons-vue';
 
 const store = useStore();
 const router = useRouter();
@@ -121,6 +121,12 @@ const items = shallowRef([
             title: '表白墙',
             isBoss: true,
         },
+        {
+            icon: GoodsFilled,
+            index: '/order',
+            title: '订单管理',
+            isBoss: true,
+        }
     ])
 
 const collapse = () => {

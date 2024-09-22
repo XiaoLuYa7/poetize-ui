@@ -15,7 +15,7 @@
             </svg>
             文章信息
         </el-tag>
-        <el-form :model="article" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+        <el-form :model="article" :rules="rules" ref="ruleForm" label-width="150px">
             <el-form-item label="标题" prop="articleTitle">
                 <el-input maxlength="30" v-model="article.articleTitle"></el-input>
             </el-form-item>
@@ -42,40 +42,43 @@
                 <el-switch v-model="article.recommendStatus"></el-switch>
             </el-form-item>
 
-            <el-form-item label="是否可见" prop="viewStatus">
+            <el-form-item label="是否付费" prop="viewStatus">
                 <el-tag :type="article.viewStatus === false ? 'danger' : 'success'" disable-transitions>
                     {{ article.viewStatus === false ? '否' : '是' }}
                 </el-tag>
                 <el-switch v-model="article.viewStatus"></el-switch>
             </el-form-item>
 
-            <el-form-item v-if="article.viewStatus === false" label="不可见时的访问密码" prop="password">
-                <el-input maxlength="30" v-model="article.password"></el-input>
+            <el-form-item v-if="article.viewStatus === true" label="付费时的提示信息" prop="tips">
+                <el-input maxlength="255" v-model="article.tips" :min="0"></el-input>
             </el-form-item>
 
-            <el-form-item v-if="article.viewStatus === false" label="密码提示" prop="tips">
-                <el-input maxlength="60" v-model="article.tips"></el-input>
+            <el-form-item v-if="article.viewStatus === true" label="付费金额" prop="amount">
+                <el-input v-model="article.amount" step="0.01" type="number" style="width: 240px"></el-input>
             </el-form-item>
 
             <el-form-item label="封面" prop="articleCover">
                 <div class="myCenter" style="flex-direction: column;width: 100%">
                     <div style="display: flex;width: 100%">
-                        <el-input v-model="article.articleCover"></el-input>
+                        <el-input v-model="article.articleCover" disabled></el-input>
                         <el-image class="table-td-thumb" lazy style="margin-left: 10px"
-                            :preview-src-list="[article.articleCover]" :src="article.articleCover" fit="cover"></el-image>
+                            :preview-src-list="[article.articleCover]" :src="article.articleCover"
+                            fit="cover"></el-image>
                     </div>
                     <UploadPicture :isAdmin="true" :prefix="'articleCover'" style="margin-top: 10px;width: 100%"
                         @addPicture="addArticleCover" :maxSize="2" :maxNumber="1"></UploadPicture>
                 </div>
             </el-form-item>
             <el-form-item label="分类" prop="sortId">
-                <el-select v-model="article.sortId" popper-class="custom-popper" filterable clearable placement="bottom" placeholder="请选择分类" style="width: 240px">
+                <el-select v-model="article.sortId" popper-class="custom-popper" filterable clearable placement="bottom"
+                    placeholder="请选择分类" style="width: 240px">
                     <el-option v-for="item in sorts" :key="item.id" :label="item.sortName" :value="item.id">
                     </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="标签" prop="labelId">
-                <el-select v-model="article.labelId" popper-class="custom-popper" filterable clearable placement="bottom" placeholder="请选择标签" style="width: 240px">
+                <el-select v-model="article.labelId" popper-class="custom-popper" filterable clearable
+                    placement="bottom" placeholder="请选择标签" style="width: 240px">
                     <el-option v-for="item in labelsTemp" :key="item.id" :label="item.labelName" :value="item.id">
                     </el-option>
                 </el-select>
@@ -117,9 +120,9 @@ const data = reactive({
         articleContent: '',
         commentStatus: true,
         recommendStatus: false,
-        viewStatus: true,
-        password: '',
-        tips: '',
+        viewStatus: false,
+        amount: 0,
+        tips: '该篇文章是付费内容，可以为您提供更深入的见解和高质量的信息。如有需要，请选择支付方式并支付！',
         articleCover: '',
         videoUrl: '',
         sortId: null,
@@ -142,7 +145,7 @@ const data = reactive({
             { required: true, message: '是否推荐', trigger: 'change' },
         ],
         viewStatus: [
-            { required: true, message: '是否可见', trigger: 'change' },
+            { required: true, message: '是否付费', trigger: 'change' },
         ],
         articleCover: [{ required: true, message: '封面', trigger: 'change' }],
         sortId: [{ required: true, message: '分类', trigger: 'change' }],
@@ -153,7 +156,7 @@ const data = reactive({
 })
 
 
-watch(() => data.article.sortId, (newVal, oldVal)=> {
+watch(() => data.article.sortId, (newVal, oldVal) => {
     if (oldVal !== null) {
         data.article.labelId = null
     }
@@ -162,13 +165,24 @@ watch(() => data.article.sortId, (newVal, oldVal)=> {
     }
 })
 
-onMounted(() => {
-    initialize()
-})
-const initialize = async () => {
+onMounted(async () => {
     await getSortAndLabel()
-    initVditor()
-}
+    await initVditor()
+})
+
+const verifyAmount = (value) => {
+    // 使用正则表达式只允许输入大于0且最多两位小数的数字
+    const regex = /^(?!0(\.0{1,2})?$)([1-9]\d*|0)(\.\d{1,2})?$/;
+    if (regex.test(value)) {
+        // 确保金额大于0
+        const amount = parseFloat(value);
+        return amount > 0;
+    } else {
+        // 输入不符合要求
+        return false;
+    }
+};
+
 const imgAdd = (file) => {
     let suffix = ''
     if (file.name.lastIndexOf('.') !== -1) {
@@ -299,7 +313,7 @@ const getSortAndLabel = async () => {
 }
 const getArticle = async () => {
     try {
-        const res = await http.get(constant.baseURL + '/admin/article/getArticleById',{ id: data.id },true)
+        const res = await http.get(constant.baseURL + '/admin/article/getArticleById', { id: data.id }, true)
         if (!common.isEmpty(res.data)) {
             data.article = res.data
         }
@@ -311,13 +325,31 @@ const getArticle = async () => {
     }
 }
 const submitForm = () => {
-    if (data.article.viewStatus === false && common.isEmpty(data.article.password)) {
-        ElMessage({
-            message: '文章不可见时必须输入密码！',
-            type: 'error',
-        })
+    if (data.article.viewStatus === true) {
+        if (common.isEmpty(data.article.tips)) {
+            ElMessage({
+                message: '文章付费时必须输入提示信息！',
+                type: 'error',
+            })
+            return
+        }
+        if (common.isEmpty(data.article.amount)) {
+            ElMessage({
+                message: '文章付费时必须输入付款金额',
+                type: 'error',
+            })
+            return
+        }
+        if (!verifyAmount(data.article.amount)) {
+            ElMessage({
+                message: '请输入合法的付费金额（金额大于0并且最多两位小数哦）！',
+                type: 'error',
+            })
+
+        }
         return
     }
+
     ruleForm.value.validate((valid) => {
         if (valid) {
             data.article.articleContent = data.vditor.getValue()
@@ -372,9 +404,10 @@ const saveArticle = (value, url) => {
             })
         })
 }
-const initVditor = () => {
+const initVditor = async () => {
     data.vditor = new Vditor('vditor', {
         height: 500,
+        width: '100%',
         placeholder: '开始书写文章吧....',
         theme: 'classic',
         value: data.article.articleContent,
@@ -505,7 +538,7 @@ const initVditor = () => {
     })
 }
 
-const {id,article,sorts,labels,labelsTemp,rules,vditor,webInfo} = toRefs(data)
+const { id, article, sorts, labels, labelsTemp, rules, vditor, webInfo } = toRefs(data)
 
 </script>
 
