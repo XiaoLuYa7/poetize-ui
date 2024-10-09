@@ -48,7 +48,7 @@
                         </div>
                         <div class="recent-posts">
                             <div class="announcement background-opacity">
-                                <i class="fa fa-volume-up" aria-hidden="true"></i>
+                                <font-awesome-icon :icon="['fa', 'volume-up']" class="volume"/>
                                 <div>
                                     <div v-for="(notice, index) in common.pushNotification(store.state.webInfo.notices,true)" :key="index">
                                         {{ notice }}
@@ -478,7 +478,7 @@ const { pushDialogVisible, push, loading, showAside, indexType, printerInfo, pag
     margin: 40px auto 40px;
 }
 
-.announcement i {
+.announcement .volume {
     color: var(--themeBackground);
     font-size: 22px;
     margin: auto 0;

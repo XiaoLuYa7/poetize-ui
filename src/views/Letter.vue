@@ -50,11 +50,11 @@
 
             <a id="music_btn2" href="javascript:void(0);" style="opacity: 1">
                 <div v-if="!isPlay" class="playCss" @click="play()">
-                    <i class="fa fa-play" aria-hidden="true"></i>
+                    <font-awesome-icon :icon="['fa', 'play']" style="width: 12px;height: 14px;" />
                     <div style="margin-left: 5px">播放</div>
                 </div>
                 <div v-if="isPlay" class="playCss" @click="pause()">
-                    <i class="fa fa-pause" aria-hidden="true"></i>
+                    <font-awesome-icon :icon="['fa', 'pause']" style="width: 14px;height: 16px;"/>
                     <div style="margin-left: 5px">暂停</div>
                 </div>
             </a>
@@ -65,6 +65,7 @@
 <script setup>
 import MarkdownIt from 'markdown-it';
 import { onMounted, reactive, toRefs, inject } from 'vue';
+import multimdTablePlugin from 'markdown-it-multimd-table';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
@@ -101,9 +102,7 @@ const getAdminFamily = () => {
         .then((res) => {
             if (!common.isEmpty(res.data)) {
                 data.familyInfo = res.data.familyInfo;
-                const md = new MarkdownIt({ breaks: true }).use(
-                    require('markdown-it-multimd-table')
-                );
+                const md = new MarkdownIt({ breaks: true }).use(multimdTablePlugin);
                 data.familyInfoHtml = md.render(data.familyInfo);
             }
         })
@@ -120,6 +119,8 @@ const getFamily = () => {
         .then((res) => {
             if (!common.isEmpty(res.data)) {
                 data.familyInfo = res.data.familyInfo;
+                const md = new MarkdownIt({ breaks: true }).use(multimdTablePlugin);
+                data.familyInfoHtml = md.render(data.familyInfo);
             }
         })
         .catch((error) => {

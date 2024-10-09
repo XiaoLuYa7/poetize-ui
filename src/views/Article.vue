@@ -173,11 +173,11 @@
         </div>
 
         <div id="toc-button" @click="clickTocButton()">
-            <i class="fa fa-align-justify" aria-hidden="true"></i>
+            <font-awesome-icon :icon="['fa', 'align-justify']" />
         </div>
 
         <el-dialog draggable title="版权声明" v-model="copyrightDialogVisible" width="80%" :append-to-body="true"
-            class="article-copy" center top="25vh">
+            class="article-copy" center top="12vh">
             <div style="display: flex; align-items: center; flex-direction: column">
                 <el-avatar shape="square" :size="35" :src="store.state.webInfo.avatar"></el-avatar>
                 <div class="copyright-container">
@@ -234,7 +234,7 @@
                         <li>
                             许可协议标识：
                             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                                <img alt="知识共享许可协议" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
+                                <img alt="知识共享许可协议" :src="webStaticResourcePrefix + 'assets/image/cc.png'"
                                     style="margin-top: 5px" />
                             </a>
                         </li>
@@ -477,8 +477,8 @@
                     <template #label>
                         <div class="myCenter pop-el">
                             支付凭证
-                            <el-popover placement="top-start" title="示例图"
-                                popper-class="pop-pay-tips" :width="240" trigger="hover">
+                            <el-popover placement="top-start" title="示例图" popper-class="pop-pay-tips" :width="240"
+                                trigger="hover">
                                 <template #reference>
                                     <svg t="1726823848351" style="cursor: pointer;" viewBox="0 0 1024 1024"
                                         version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2408" width="20"

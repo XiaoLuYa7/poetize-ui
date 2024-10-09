@@ -166,7 +166,7 @@
                             </div>
                         </div>
 
-                        <div style="overflow-y: scroll; height: calc(100% - 70px)">
+                        <div class="side-class" style="height: calc(100% - 70px)">
                             <!-- 群聊天 -->
                             <div class="im-user im-group-current" v-for="(item, index) in groupChats" :key="index"
                                 v-show="groups[item].groupName.includes(showFriendValue) ||
@@ -261,7 +261,7 @@
                         </div>
 
                         <!-- 好友列表 -->
-                        <div style="overflow-y: scroll; height: calc(100% - 140px)">
+                        <div style="height: calc(100% - 180px)" class="side-class">
                             <div class="im-user" v-for="(item, index) in Object.values(friends).reverse()" :key="index"
                                 v-show="item.remark.includes(showFriendValue) ||
                                     common.isEmpty(showFriendValue)
@@ -311,7 +311,7 @@
                     <div style="height: 60px; background-color: var(--maxWhite)">
                         <span style="line-height: 60px; margin-left: 20px; font-size: 18px">系统消息</span>
                     </div>
-                    <div style=" background: var(--midWhite);overflow-y: scroll;height: calc(100% - 60px);">
+                    <div style=" background: var(--midWhite);height: calc(100% - 70px)" class="side-class">
                         <div class="msg-one" v-for="(item, index) in systemMessages" :key="index">
                             <!-- 图标 -->
                             <div>
@@ -1276,6 +1276,13 @@ const { imMessageBadge, imMessages, imChats, currentChatFriendId, groupMessages,
     width: 1000px;
 }
 
+.side-class {
+    overflow-y: scroll;
+}
+
+.side-class::-webkit-scrollbar-track {
+    background: transparent;
+}
 
 .treeHole-wrap {
     height: calc(100vh - 20vh);

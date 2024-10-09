@@ -80,7 +80,7 @@ const addPicture = (res) => {
 }
 
 const savePicture = () => {
-    let img = data.picture.name + data.picture.url
+    let img = '['+data.picture.name +',' + data.picture.url+']'
     data.commentContent += img
     data.picture.url = ''
     data.showPicture = false

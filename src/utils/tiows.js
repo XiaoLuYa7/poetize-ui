@@ -18,7 +18,7 @@ export default function (ws_protocol, ip, port, paramStr, binaryType) {
     if (port === "") {
         this.url = ws_protocol + '://' + ip + '/socket';
     } else {
-        this.url = ws_protocol + '://' + ip + ":" + port + '/socket';
+        this.url = ws_protocol + '://' + ip + (port ? ':' + port : '') + '/socket';
     }
     if (paramStr) {
         this.url += '?' + paramStr;

@@ -49,7 +49,7 @@
             </li>
         </ol>
         <div class="tree-hole-go" v-show="showPlane">
-            <i class="fa fa-paper-plane" @click="launch()"></i>
+            <font-awesome-icon :icon="['fa', 'paper-plane']" @click="launch()"/>
         </div>
     </div>
 </template>

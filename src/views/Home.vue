@@ -108,37 +108,44 @@
                                 </div>
                             </template>
                             <template v-if="!common.isEmpty(store.state.currentUser)">
-                                <el-popover placement="top-end" ref="popoverRef" @before-leave="avatarPopLeave()" @before-enter="avatarPopShow()"
-                                    trigger="hover" popper-class="user-pop" popper-style="z-index: 99">
-                                    <template #reference>
-                                        <div class="header-avatar-wrap" style="width: 40px;height: 40px;">
-                                            <el-avatar class="user-avatar" :size="36" style="margin-top: 8px"
-                                                :src="store.state.currentUser.avatar" ref="userAvatar">
-                                            </el-avatar>
+                                <div class="header-avatar-wrap" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+                                    <div  class="header-wrap-hover" ></div>
+                                    <div  class="mini-avatar--small">
+                                        <picture >
+                                            <img :src="store.state.currentUser.avatar"
+                                            :alt="store.state.currentUser.username+'的头像'" style="object-fit: inherit; width: 100%; height: 100%;">
+                                        </picture>
+                                    </div>
+                                    <div class="v-popover">
+                                        <div :class="['avatar-panel-popover', isPopoverShow ? 'popShow' : 'popHide']" :style="{ display: popoverDisplay }">
+                                            <div
+                                                style="color: rgb(24, 25, 28); text-align: center; font-weight: bold; font-size: 18px; margin-top: 25px;">
+                                                <span>{{store.state.currentUser.username}}</span>
+                                            </div>
+                                            <div class="single-item" @click="toUser()">
+                                                <div>
+                                                    <font-awesome-icon :icon="['fa', 'user-circle']"/>
+                                                    <span style="margin-left: 5px;">个人中心</span>
+                                                </div>
+                                                <el-icon><ArrowRight /></el-icon>
+                                            </div>
+                                            <div class="single-item" @click="toOrder()">
+                                                <div>
+                                                    <font-awesome-icon :icon="['fa', 'shopping-bag']"/>
+                                                    <span style="margin-left: 5px;">订单管理</span>
+                                                </div>
+                                                <el-icon><ArrowRight /></el-icon>
+                                            </div>
+                                            <div class="placeholder"></div>
+                                            <div class="single-item" @click="toLogOut()">
+                                                <div>
+                                                    <font-awesome-icon :icon="['fa', 'sign-out']"/>
+                                                    <span style="margin-left: 5px;">退出</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </template>
-                                    <template #default>
-                                        <div class="user-content">
-                                            <div class="user-header">{{greeting}}</div>
-                                            <div class="user-content-item" @click="toUser()">
-                                                <i class="fa fa-user-circle" aria-hidden="true" />
-                                                <span style="margin-left: 6px;">个人中心</span>
-                                                <i class="fa fa-angle-right" aria-hidden="true" style="float: right;" />
-                                            </div>
-                                            <div class="user-content-item" @click="toOrder()">
-                                                <i class="fa fa-shopping-bag" aria-hidden="true" />
-                                                <span style="margin-left: 6px;">订单管理</span>
-                                                <i class="fa fa-angle-right" aria-hidden="true" style="float: right;" />
-                                            </div>
-                                            <el-divider style="width: 90%;margin: 12px 0px" />
-                                            <div class="user-content-item" @click="toLogOut()">
-                                                <i class="fa fa-sign-out" aria-hidden="true" />
-                                                <span style="margin-left: 6px;">退出</span>
-                                                <i class="fa fa-angle-right" aria-hidden="true" style="float: right;" />
-                                            </div>
-                                        </div>
-                                    </template>
-                                </el-popover>
+                                    </div>
+                                </div>
                             </template>
                         </li>
                     </ul>
@@ -169,28 +176,21 @@
                     <template v-slot:content>
                         <div>返回主页</div>
                     </template>
-                    <i aria-hidden="true" class="fa fa-home"></i>
+                    <font-awesome-icon :icon="['fa', 'home']"/>
                 </el-tooltip>
             </div>
 
-            <el-popover placement="left" :close-delay="500" trigger="hover" style="cursor: pointer">
+            <el-popover placement="left" :close-delay="500" trigger="hover" :hide-after="11111111111111" style="cursor: pointer">
                 <template v-slot:reference>
-                    <div>
-                        <i class="fa fa-cog iconRotate" aria-hidden="true"></i>
-                    </div>
+                     <font-awesome-icon :icon="['fa', 'cog']" class="iconRotate"/>
                 </template>
                 <div class="my-setting">
-                    <div>
                         <!-- 太阳按钮 -->
-                        <el-icon v-if="isDark" class="iconRotate" @click="changeColor()">
-                            <Sunny />
-                        </el-icon>
+                        <font-awesome-icon v-if="isDark" :icon="['fa', 'sun']" class="tool iconRotate" @click="changeColor()"/>
                         <!-- 月亮按钮 -->
-                        <i v-else class="fa fa-moon-o" aria-hidden="true" @click="changeColor()"></i>
-                    </div>
-                    <div>
-                        <i class="fa fa-snowflake-o" aria-hidden="true" @click="changeMouseAnimation()"></i>
-                    </div>
+                        <font-awesome-icon v-else :icon="['fa', 'moon']" class="tool" @click="changeColor()"/>
+                        <font-awesome-icon :icon="['fa', 'snowflake']" class="tool" @click="changeMouseAnimation()"/>
+
                 </div>
             </el-popover>
         </div>
@@ -273,7 +273,7 @@
                     <template v-if="common.isEmpty(store.state.currentUser)">
                         <li @click="smallMenu({ path: '/login' })">
                             <div>
-                                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                <font-awesome-icon :icon="['fa', 'sign-in']"/>
                                 <span>&nbsp;登录</span>
                             </div>
                         </li>
@@ -281,19 +281,19 @@
                     <template v-else>
                         <li @click="smallMenu({ path: '/user' })">
                             <div>
-                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                <font-awesome-icon :icon="['fa', 'user-circle']"/>
                                 <span>&nbsp;个人中心</span>
                             </div>
                         </li>
                         <li @click="smallMenu({ path: '/user' })">
                             <div>
-                                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                                <font-awesome-icon :icon="['fa', 'shopping-bag']"/>
                                 <span>&nbsp;订单管理</span>
                             </div>
                         </li>
                         <li @click="smallMenuLogout()">
                             <div>
-                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                <font-awesome-icon :icon="['fa', 'sign-out']"/>
                                 <span>&nbsp;退出</span>
                             </div>
                         </li>
@@ -310,7 +310,7 @@ import mousedown from "../utils/mousedown";
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import { Operation, ArrowDown, Sunny } from '@element-plus/icons-vue';
+import { Operation, ArrowRight,ArrowDown, Sunny } from '@element-plus/icons-vue';
 
 // hooks
 const common = inject("$common");
@@ -331,14 +331,14 @@ const data = reactive({
     mobile: false,
     showElement: false,
     sortMenu: false,
-    greeting: '',
-    userPopVisible: false
+    userPopVisible: false,
+    popoverDisplay: 'none',
+    isPopoverShow: false,
+    inTimer: null,
+    outTimer: null,
 });
 
 const dropdown = ref(null);
-const popoverRef = ref(null);
-const userAvatar = ref(null);
-
 
 onMounted(() => {
     if (data.mouseAnimation) {
@@ -376,12 +376,12 @@ onMounted(() => {
         let docWidth = document.body.clientWidth;
         data.mobile = docWidth < 900;
     });
-
-    updateGreeting();
 });
 
 onUnmounted(() => {
     window.removeEventListener("scroll", onScrollPage);
+    clearTimeout(data.inTimer);
+    clearTimeout(data.outTimer);
 });
 
 watch(() => data.scrollTop, (newScrollTop, oldScrollTop) => {
@@ -401,6 +401,24 @@ watch(() => data.scrollTop, (newScrollTop, oldScrollTop) => {
 
 const toolbar = computed(() => store.state.toolbar);
 const sortInfo = computed(() => store.state.sortInfo);
+
+const handleMouseEnter = () => {
+  clearTimeout(data.outTimer);
+  data.inTimer = setTimeout(() => {
+    data.popoverDisplay = '';
+    data.isPopoverShow = true;
+    $('.header-wrap-hover').css('display', 'unset');
+  }, 100);
+};
+
+const handleMouseLeave = () => {
+  clearTimeout(data.inTimer);
+  data.isPopoverShow = false;
+  data.outTimer = setTimeout(() => {
+    data.popoverDisplay = 'none';
+    $('.header-wrap-hover').css('display', 'none');
+  }, 100);
+};
 
 const smallMenu = (route) => {
     data.toolbarDrawer = false;
@@ -433,64 +451,24 @@ const goIm = () => {
     }
 };
 
-// 每小时执行
-setInterval(() => {
-    updateGreeting();
-}, 3600000);
-
-const updateGreeting = () => {
-    const now = new Date();
-    const hour = now.getHours();
-    let name = '';
-    if (!common.isEmpty(store.state.currentUser)) {
-        name = store.state.currentUser.username
-    }
-
-    if (hour >= 5 && hour < 11) {
-        data.greeting ='早上好 '+name;
-    } else if (hour >= 11 && hour < 13) {
-        data.greeting = '中午好 '+name;
-    }else if (hour >= 13 && hour < 18) {
-        data.greeting = '下午好 '+name;
-    } else if (hour >= 18 && hour < 22) {
-        data.greeting = '晚上好 '+name;
-    } else {
-        data.greeting = '晚安 ' + name;
-    }
-}
-
 const goAdmin = () => {
     window.open(constant.webURL + "/admin");
 };
 
 const toUser = () => {
-    closePopover();
+    handleMouseLeave();
     router.push({ path: '/user' });
 };
 
 const toOrder = () => {
-    closePopover();
+    handleMouseLeave();
     router.push({ path: '/userOrder' });
 };
 
 const toLogOut = () => {
-    closePopover();
+    handleMouseLeave();
     logout();
 };
-
-const avatarPopLeave = ()=> {
-    userAvatar.value.$el.classList.remove('user-avatar-move');
-}
-
-const avatarPopShow = ()=> {
-    userAvatar.value.$el.classList.add('user-avatar-move');
-}
-
-
-const closePopover = () => {
-    console.log(popoverRef.value)
-    popoverRef.value.hide();
-}
 
 const logout = () => {
     http.get(constant.baseURL + "/user/logout")
@@ -649,7 +627,8 @@ const changeMouseAnimation = () => {
     }
 };
 
-const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer, mobile, showElement, sortMenu,greeting} = toRefs(data)
+const { toolButton, hoverEnter, mouseAnimation, isDark, toolbarDrawer, mobile,
+    showElement, sortMenu, isPopoverShow, popoverDisplay } = toRefs(data)
 
 </script>
 
@@ -688,7 +667,7 @@ const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer
 }
 
 .el-popper.is-light.el-popover.user-pop {
-    top:70px !important
+    top: 70px !important
 }
 
 .user-pop .el-popper__arrow {
@@ -739,7 +718,7 @@ const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid #fff;
-    transition: width .3s ease,height .3s ease,top .3s ease,left .3s ease
+    transition: width .3s ease, height .3s ease, top .3s ease, left .3s ease
 }
 
 .user-avatar-move {
@@ -753,10 +732,97 @@ const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer
     transform: rotate(360deg);
 }
 
+.mini-avatar--small {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #fff;
+    transition: width .3s ease,height .3s ease,top .3s ease,left .3s ease
+}
 
-.user-content {
-    width: 90%;
-    margin: 16% 5% 5% 5%;
+.header-avatar-wrap:hover .mini-avatar--small {
+    top: 25px;
+    left: -120px;
+    width: 70px;
+    height: 70px
+}
+
+.header-avatar-wrap {
+    position: relative;
+    margin-top: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer
+}
+
+
+.v-popover {
+    position: absolute;
+    z-index: 1;
+    padding-top: 20px;
+    margin-left: -110px;
+    top: 100%;
+    left: 50%;
+    transform: translate3d(-50%,0,0)
+}
+
+.avatar-panel-popover {
+    width: 280px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 0 24px 18px;
+    box-shadow: 0 0 30px rgba(0,0,0,.1);
+    border: 1px solid #e3e5e7;
+    background-color: white;
+}
+
+.popHide {
+    -webkit-animation: fade-out .2s ease-out forwards;
+    animation: fade-out .2s ease-out forwards;
+    transform-origin: top
+}
+
+.popShow {
+    -webkit-animation: fade-in .2s ease-out forwards;
+    animation: fade-in .2s ease-out forwards;
+    transform-origin: top
+}
+
+.single-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    height: 38px;
+    border-radius: 8px;
+    color: #61666d;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color .3s;
+    margin-bottom: 2px
+}
+
+.single-item:hover {
+    background-color: #f1f2f3
+}
+
+.placeholder {
+    margin: 6px 0 12px 0;
+    border-bottom: 1px solid #ddd
+}
+
+.header-wrap-hover {
+    position: absolute;
+    width: 160px;
+    height: 70px;
+    top: -10px;
+    left: -120px;
+    display: none;
 }
 
 .user-content-item {
@@ -929,11 +995,11 @@ const { toolButton, hoverEnter, mouseAnimation, isDark, scrollTop, toolbarDrawer
     font-size: 20px;
 }
 
-.my-setting i {
+.my-setting .tool {
     padding: 5px;
 }
 
-.my-setting i:hover {
+.my-setting .tool:hover {
     color: var(--themeBackground);
 }
 

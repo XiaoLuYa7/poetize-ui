@@ -1,7 +1,6 @@
 export default {
 
   baseURL: import.meta.env.VITE_BASE_URL,
-  imBaseURL: import.meta.env.VITE_IM_BASE_URL,
   webURL: import.meta.env.VITE_WEB_URL,
 
 
