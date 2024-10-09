@@ -136,7 +136,7 @@ const data = reactive({
     },
     photoTitleList: [],
     photoList: [],
-    webStaticResourcePrefix: import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX
+    webStaticResourcePrefix: import.meta.env.VITE_BASE_URL + "/"
 });
 
 onMounted(() => {

@@ -85,7 +85,7 @@ export default {
         content = content.replace(/\[[^\[^\]]+\]/g, (word) => {
             let index = constant.emojiList.indexOf(word.replace("[", "").replace("]", ""));
             if (index > -1) {
-                let url = import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX + "assets/emoji/q" + (index + 1) + ".gif";
+                let url = import.meta.env.VITE_BASE_URL + "assets/emoji/q" + (index + 1) + ".gif";
                 return '<img loading="lazy" style="vertical-align: middle;width: 32px;height: 32px" src="' + url + '" title="' + word + '"/>';
             } else {
                 return word;

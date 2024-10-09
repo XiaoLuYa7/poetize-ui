@@ -14,14 +14,13 @@ import './assets/css/index.css';
 import './assets/css/tocbot.css';
 import './assets/css/color.css';
 import './assets/css/markdown-highlight.css';
-import './assets/css/font-awesome.min.css';
+
 import './assets/css/vditor-custom.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAlignJustify, faCheck, faCog, faCopy, faHome, faMoon, faPaperPlane, faPause, faPlay, faRemove, faShoppingBag, faSignOut, faSnowflake, faSun, faUserCircle, faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faVolumeUp } from '@fortawesome/free-solid-svg-icons/faVolumeUp';
-import { faAtom } from '@fortawesome/free-solid-svg-icons/faAtom';
 
 library.add(faUserSecret)
 library.add(faPaperPlane)

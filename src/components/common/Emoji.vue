@@ -48,7 +48,7 @@ const getEmojiList = (emojiList) => {
     emojiList.forEach((emoji, index) => {
         const emojiName = `[${emoji}]`
         const url =
-            import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX +
+            import.meta.env.VITE_BASE_URL +
             `assets/emoji/q${index + 1}.gif`
         result[emojiName] = url
     })

@@ -15,7 +15,7 @@ import MyHeader from './common/MyHeader.vue'
 import Sidebar from './common/Sidebar.vue'
 
 let root = document.querySelector(':root')
-let webStaticResourcePrefix = import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX
+let webStaticResourcePrefix = import.meta.env.VITE_BASE_URL + "/"
 root.style.setProperty(
     '--backgroundPicture',
     'url(' + webStaticResourcePrefix + 'assets/image/backgroundPicture.jpg)'

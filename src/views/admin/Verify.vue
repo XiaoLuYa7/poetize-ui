@@ -1,5 +1,5 @@
 <template>
-    <div class="myCenter verify-container">
+    <div class="myCenter verify-container" @keyup.enter="login()">
         <!-- 背景图片 -->
         <el-image class="my-el-image" style="position: absolute" v-once lazy :src="store.state.webInfo.randomCover[
             Math.floor(Math.random() * store.state.webInfo.randomCover.length)
@@ -59,7 +59,7 @@ const data = reactive({
 
 
 onMounted(() => {
-    const webStaticResourcePrefix = import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX;
+    const webStaticResourcePrefix = import.meta.env.VITE_BASE_URL + "/";
     const font = new FontFace(
         'poetize-font',
         `url(${webStaticResourcePrefix}assets/font/font.woff2)`

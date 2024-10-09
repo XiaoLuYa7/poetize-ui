@@ -573,7 +573,7 @@ const data = reactive({
     payType: 1,
     showPayQrCode: false,
     showWorkOrderDialog: false,
-    webStaticResourcePrefix: import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX,
+    webStaticResourcePrefix: import.meta.env.VITE_BASE_URL + "/",
     workOrder: {
         orderNo: '',
         articleTitle: '',
@@ -1060,7 +1060,7 @@ const highlight = () => {
         $(block).after(
             '<a class="copy-code" href="javascript:" data-clipboard-target="#hljs-' +
             i +
-            '"><i class="fa fa-copy" aria-hidden="true"></i><span> 复制代码</span></a>'
+            '"><span> 复制代码</span></a>'
         );
         // const cliphboard = new ClipboardJS(".copy-code");
     });
@@ -1079,7 +1079,7 @@ const highlight = () => {
         // 3秒后恢复按钮图标和文字
         setTimeout(function () {
             $copyButton.html(
-                '<i class="fa fa-copy" aria-hidden="true"></i><span> 复制代码</span>'
+                '<span> 复制代码</span>'
             );
         }, 3000);
     });
@@ -1090,13 +1090,13 @@ const highlight = () => {
         // 修改按钮图标和文字
         const $copyButton = $(e.trigger);
         $copyButton.html(
-            '<i class="fa fa-remove" aria-hidden="true"></i><span> 复制失败！</span>'
+            '<span> 复制失败！</span>'
         );
 
         // 3秒后恢复按钮图标和文字
         setTimeout(function () {
             $copyButton.html(
-                '<i class="fa fa-copy" aria-hidden="true"></i><span> 复制代码</span>'
+                '<span> 复制代码</span>'
             );
         }, 3000);
     });

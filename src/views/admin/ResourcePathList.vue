@@ -105,7 +105,7 @@
                         <div style="margin-top: 10px; margin-bottom: 5px">封面：</div>
                         <div style="display: flex">
                             <el-input v-model="resourcePath.cover"></el-input>
-                            <div style="width: 66px; margin: 3.5px 0 0 10px">
+                            <div style="width: 88px; margin: 3.5px 0 0 10px">
                                 <ProButton :info="'上传封面'" @click="addResourcePathCover()"
                                     :before="constant.before_color_1" :after="constant.after_color_1">
                                 </ProButton>
@@ -118,7 +118,7 @@
                         <div style="display: flex">
                             <el-input :disabled="!['favorites'].includes(resourcePath.type)"
                                 v-model="resourcePath.url"></el-input>
-                            <div style="width: 66px; margin: 3.5px 0 0 10px" v-show="!['lovePhoto', 'albums', 'favorites'].includes(
+                            <div style="width:88px; margin: 3.5px 0 0 10px" v-show="!['lovePhoto', 'albums', 'favorites'].includes(
                                 resourcePath.type
                             )
                                 ">

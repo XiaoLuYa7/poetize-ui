@@ -510,7 +510,7 @@ const gotoContent = () => {
 
 const buildCssPicture = () => {
     let root = document.querySelector(":root");
-    let webStaticResourcePrefix = import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX;
+    let webStaticResourcePrefix = import.meta.env.VITE_BASE_URL + "/";
     root.style.setProperty(
         "--letterBg",
         "url(" + webStaticResourcePrefix + "assets/image/letterBg.png)"

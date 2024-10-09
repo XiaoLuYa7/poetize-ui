@@ -294,7 +294,7 @@ const data = reactive({
         minute: 0,
         second: 0,
     },
-    webStaticResourcePrefix: import.meta.env.VITE_WEB_STATIC_RESOURCE_PREFIX
+    webStaticResourcePrefix: import.meta.env.VITE_BASE_URL + "/"
 })
 
 
